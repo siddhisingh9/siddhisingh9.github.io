@@ -186,24 +186,30 @@ header.site-nav{
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 #status-text{white-space:nowrap;overflow:hidden;}
 
-/* hero visual: profile card stays fixed; smaller photo peeks out from behind its top-right corner */
+/* hero visual: a polaroid pinned in front of the card's top-right corner.
+   It only overlaps the card's header, which is empty on the right. */
 .hero-visual{
   position:relative;
-  padding:118px 52px 0 0;
+  padding:150px 0 0 0;
 }
 .photo-frame{
-  position:absolute;top:0;right:0;z-index:1;
-  width:44%;aspect-ratio:4/5;
-  border-radius:14px;overflow:hidden;
-  border:1px solid var(--line);background:var(--surface-2);
-  box-shadow:0 20px 44px rgba(0,0,0,.45);
-  transform:rotate(-6deg);
-  transition:transform .4s cubic-bezier(.22,1,.36,1);
+  position:absolute;top:0;right:24px;z-index:3;
+  width:156px;margin:0;
+  background:var(--ink-hi);padding:9px 9px 30px;border-radius:3px;
+  box-shadow:0 18px 40px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.3);
+  transform:rotate(5deg);
+  transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
 }
-.photo-frame img{width:100%;height:100%;object-fit:cover;display:block;}
-.hero-visual:hover .photo-frame{
-  z-index:3;
-  transform:translate(16px,-16px) rotate(-3deg) scale(1.1);
+.photo-img{aspect-ratio:4/5;overflow:hidden;background:var(--surface-2);border-radius:1px;}
+.photo-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-tape{
+  position:absolute;top:-11px;left:50%;width:72px;height:22px;
+  transform:translateX(-50%) rotate(-5deg);
+  background:rgba(218,181,107,.6);box-shadow:0 1px 3px rgba(0,0,0,.25);
+}
+.photo-frame:hover{
+  transform:rotate(0deg) translateY(-4px) scale(1.04);
+  box-shadow:0 26px 54px rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.3);
 }
 
 /* JSON profile card — fixed in place, never moves */
@@ -525,7 +531,7 @@ footer p{margin:0;}
 .edu-card,.tl-item,.activity-item,.story-beat{scroll-margin-top:96px;}
 
 /* profile.json values as links */
-.fc-hint{margin-left:auto;font-size:10.5px;color:var(--ink-low);opacity:.85;}
+.fc-comment{color:var(--ink-low);font-style:italic;opacity:.85;}
 a.fc-link{border-bottom:1px dashed var(--gold-dim);border-radius:2px;transition:border-color .2s ease, background-color .2s ease;}
 a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);background:rgba(218,181,107,.09);}
 @keyframes flashRing{
@@ -579,7 +585,25 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 @media (max-width:700px){.palette-foot{display:none;}.palette{padding-top:10vh;}}
 
 /* small confirmation toast (reuses easter-toast look) */
-.easter-toast.mini{max-width:240px;text-align:center;padding:12px 18px;}
+.easter-toast.mini{max-width:320px;text-align:center;padding:12px 18px;}
+.pf-secret{margin-left:auto;font-style:italic;opacity:.8;}
+
+/* "Currently" card in About */
+.about-side{display:flex;flex-direction:column;gap:14px;}
+.now-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
+.now-head{
+  display:flex;align-items:center;gap:9px;margin-bottom:12px;
+  font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--gold);
+}
+.now-head .live-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:pulse 2.2s ease-in-out infinite;}
+.now-row{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:baseline;padding:6px 0;border-top:1px solid var(--line-soft);}
+.now-row:first-of-type{border-top:none;}
+.now-k{display:flex;align-items:center;gap:8px;white-space:nowrap;font-family:var(--mono);font-size:11px;color:var(--ink-low);}
+.now-k::before{content:'';width:6px;height:6px;border-radius:50%;flex:none;}
+.now-row.pink .now-k::before{background:var(--pink);}
+.now-row.purple .now-k::before{background:var(--purple);}
+.now-row.gold .now-k::before{background:var(--gold);}
+.now-v{font-size:14px;color:var(--ink-hi);line-height:1.5;}
 
 /* project story progress dots */
 .sv-dots{display:flex;justify-content:center;gap:4px;margin-top:14px;}
@@ -597,12 +621,18 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 @media (max-width:860px){
   .hero-grid{grid-template-columns:1fr;}
   .hero-visual{
-    padding:0;max-width:380px;margin:0 auto;
-    display:flex;flex-direction:column;align-items:center;gap:22px;
+    padding:12px 0 0;max-width:380px;margin:0 auto;
+    display:flex;flex-direction:column;align-items:center;gap:0;
   }
   .photo-frame{
-    position:static;width:52%;transform:rotate(-4deg);
+    position:relative;top:auto;right:auto;width:146px;
+    align-self:flex-end;margin:0 20px -52px 0;
   }
+}
+@media (max-width:480px){
+  .photo-frame{width:124px;margin:0 6px -46px 0;}
+}
+@media (max-width:860px){
   .fact-card{
     position:static;width:100%;margin:0;
   }
@@ -704,12 +734,14 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
     <div class="hero-visual reveal in d2">
       <!-- To use your own photo: replace the src below with your image file
            (e.g. src="siddhi.jpg", placed in the same folder as this HTML file). -->
-      <div class="photo-frame">
-        <img src="siddhiimg.jpeg" alt="Siddhi Singh" id="heroPhoto"/>
-      </div>
+      <figure class="photo-frame">
+        <span class="photo-tape" aria-hidden="true"></span>
+        <div class="photo-img"><img src="siddhiimg.jpeg" alt="Siddhi Singh" id="heroPhoto"/></div>
+      </figure>
 
       <div class="fact-card">
-        <div class="fc-head"><span class="fc-dot p"></span><span class="fc-dot pk"></span><span class="fc-dot g"></span><span class="fc-path">~/profile.json</span><span class="fc-hint">click a value to jump</span></div>
+        <div class="fc-head"><span class="fc-dot p"></span><span class="fc-dot pk"></span><span class="fc-dot g"></span><span class="fc-path">~/profile.json</span></div>
+        <div class="fc-comment">// click a value to jump</div>
         <div><span class="fc-punc">{</span></div>
         <div>&nbsp;&nbsp;<span class="fc-key">"role"</span><span class="fc-punc">:</span> <a class="fc-link" href="#about"><span class="fc-str">"B.Tech · DSAI · 3rd Year"</span></a><span class="fc-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="fc-key">"institute"</span><span class="fc-punc">:</span> <a class="fc-link" href="#edu-card"><span class="fc-str">"IIT Bhilai"</span></a><span class="fc-punc">,</span></div>
@@ -775,12 +807,21 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
           just one has never really been my thing.
         </p>
       </div>
-      <div class="stat-strip reveal d2">
+      <div class="about-side reveal d2">
+      <div class="stat-strip">
         <div class="stat-box"><b>8.71</b><span>CGPA / 10</span></div>
         <div class="stat-box"><b>Top 200</b><span>of 27,000+ · Flipkart</span></div>
         <div class="stat-box"><b>4</b><span>Leadership &amp; mentor roles</span></div>
         <div class="stat-box"><b>2</b><span>AI systems shipped</span></div>
         <div class="stat-box"><b>250+</b><span>Problems solved on LeetCode</span></div>
+      </div>
+      <!-- CURRENTLY: edit these three values whenever they change. Delete a row to hide it. -->
+      <div class="now-card" id="now-card">
+        <div class="now-head"><span class="live-dot" aria-hidden="true"></span>Currently</div>
+        <div class="now-row pink"><span class="now-k">watching</span><span class="now-v">[a sitcom]</span></div>
+        <div class="now-row purple"><span class="now-k">listening to</span><span class="now-v">[a song or artist]</span></div>
+        <div class="now-row gold"><span class="now-k">reading</span><span class="now-v">[a book]</span></div>
+      </div>
       </div>
     </div>
   </div>
@@ -1044,6 +1085,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
       <span><kbd>&uarr;</kbd><kbd>&darr;</kbd>move</span>
       <span><kbd>enter</kbd>select</span>
       <span><kbd>esc</kbd>close</span>
+      <span class="pf-secret">some words do secret things</span>
     </div>
   </div>
 </div>
@@ -1054,33 +1096,34 @@ const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').match
 /* ---------- footer year ---------- */
 document.getElementById('year').textContent = new Date().getFullYear();
 
+/* ---------- confetti burst (logo easter egg + palette) ---------- */
+const BURST_COLORS = ['#DAB56B', '#E693AC', '#B594E3'];
+
+function spawnBurst(el){
+  if(reduceMotion) return;
+  const rect = el.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+  for(let i = 0; i < 14; i++){
+    const p = document.createElement('span');
+    p.className = 'mark-burst';
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 36 + Math.random() * 54;
+    p.style.left = cx + 'px';
+    p.style.top = cy + 'px';
+    p.style.background = BURST_COLORS[i % BURST_COLORS.length];
+    p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+    p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 850);
+  }
+}
+
 /* ---------- logo click easter egg ---------- */
 (function(){
   const brandMark = document.getElementById('brandMark');
   const easterToast = document.getElementById('easterToast');
   if(!brandMark || !easterToast) return;
   let clicks = 0, toastTimer;
-  const BURST_COLORS = ['#DAB56B', '#E693AC', '#B594E3'];
-
-  function spawnBurst(el){
-    if(reduceMotion) return;
-    const rect = el.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-    for(let i = 0; i < 14; i++){
-      const p = document.createElement('span');
-      p.className = 'mark-burst';
-      const angle = Math.random() * Math.PI * 2;
-      const dist = 36 + Math.random() * 54;
-      p.style.left = cx + 'px';
-      p.style.top = cy + 'px';
-      p.style.background = BURST_COLORS[i % BURST_COLORS.length];
-      p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
-      p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
-      document.body.appendChild(p);
-      setTimeout(() => p.remove(), 850);
-    }
-  }
-
   brandMark.addEventListener('click', (e) => {
     clicks++;
     if(clicks >= 5){
@@ -1374,11 +1417,11 @@ buildOrbitGrid();
 /* ---------- small confirmation toast ---------- */
 const miniToast = document.getElementById('miniToast');
 let miniTimer;
-function showToast(text){
+function showToast(text, ms = 2200){
   miniToast.textContent = text;
   miniToast.classList.add('show');
   clearTimeout(miniTimer);
-  miniTimer = setTimeout(() => miniToast.classList.remove('show'), 2200);
+  miniTimer = setTimeout(() => miniToast.classList.remove('show'), ms);
 }
 
 /* ---------- profile.json values jump to their section ---------- */
@@ -1413,6 +1456,39 @@ document.querySelectorAll('.fc-link').forEach(link => {
     if(el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
   };
   const openUrl = (url) => () => window.open(url, '_blank', 'noopener');
+  const flashTo = (id) => () => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    setTimeout(() => {
+      el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+      el.addEventListener('animationend', () => el.classList.remove('flash'), { once: true });
+    }, reduceMotion ? 0 : 650);
+  };
+
+  // Hidden commands: they only appear once someone types (the start of) the word.
+  const SECRETS = [
+    { label: 'shawarma', triggers: ['shawarma'],
+      run: () => showToast('Correct. Shawarma plus any sitcom is the perfect evening.', 3200) },
+    { label: 'sitcom', triggers: ['sitcom'],
+      run: () => showToast('Any sitcom works. Rewatches absolutely count.', 3000) },
+    { label: 'chai', triggers: ['chai', 'tea'],
+      run: () => showToast('Cups of chai that went into this site: classified.', 3000) },
+    { label: 'sudo', triggers: ['sudo'],
+      run: () => showToast('Nice try. Permission denied.', 2600) },
+    { label: 'debug', triggers: ['debug', 'bug'],
+      run: () => showToast("It was a missing comma. It's always a missing comma.", 3200) },
+    { label: 'table tennis', triggers: ['table tennis', 'ping', 'pong', 'tt'],
+      run: () => showToast('Table tennis challenge accepted. Loser buys shawarma.', 3200) },
+    { label: 'hire siddhi', triggers: ['hire siddhi', 'hire'],
+      run: () => {
+        spawnBurst(openBtn);
+        showToast('Great choice. Opening your email...', 2400);
+        setTimeout(() => {
+          location.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent("Let's work together");
+        }, 900);
+      } }
+  ].map(c => ({ ...c, kind: 'secret' }));
 
   async function copyEmail(){
     try{
@@ -1442,18 +1518,23 @@ document.querySelectorAll('.fc-link').forEach(link => {
     { label: 'Open GitHub',   kind: 'link', keys: 'code repos',                  run: openUrl('https://github.com/siddhisingh9') },
     { label: 'Open LinkedIn', kind: 'link', keys: 'profile network',             run: openUrl('https://www.linkedin.com/in/siddhi-singh-33170323a/') },
     { label: 'Open LeetCode', kind: 'link', keys: 'dsa problems',                run: openUrl('https://leetcode.com/u/siddhi_singh9/') },
+    { label: 'Currently',     kind: 'about',  keys: 'now watching listening reading', run: flashTo('now-card') },
     { label: 'Back to top',   kind: 'scroll', keys: 'home hero start',           run: goTo('hero') }
   ];
 
   let results = COMMANDS, active = 0, lastFocus = null;
 
   function filter(q){
-    const terms = q.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    const query = q.toLowerCase().trim().replace(/\s+/g, ' ');
+    const terms = query.split(' ').filter(Boolean);
     if(!terms.length) return COMMANDS;
-    return COMMANDS.filter(c => {
+    const secrets = SECRETS.filter(c => c.triggers.some(t =>
+      t === query || (query.length >= 3 && t.startsWith(query))
+    ));
+    return secrets.concat(COMMANDS.filter(c => {
       const hay = (c.label + ' ' + c.kind + ' ' + c.keys).toLowerCase();
       return terms.every(t => hay.includes(t));
-    });
+    }));
   }
 
   function render(){
