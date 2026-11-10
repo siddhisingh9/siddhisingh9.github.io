@@ -519,6 +519,79 @@ footer p{margin:0;}
 @keyframes burstFly{to{transform:translate(var(--tx),var(--ty)) scale(0);opacity:0;}}
 
 /* ============================================================
+   INTERACTIVE ADDITIONS
+   ============================================================ */
+/* jump targets clear the fixed nav */
+.edu-card,.tl-item,.activity-item,.story-beat{scroll-margin-top:96px;}
+
+/* profile.json values as links */
+.fc-hint{margin-left:auto;font-size:10.5px;color:var(--ink-low);opacity:.85;}
+a.fc-link{border-bottom:1px dashed var(--gold-dim);border-radius:2px;transition:border-color .2s ease, background-color .2s ease;}
+a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);background:rgba(218,181,107,.09);}
+@keyframes flashRing{
+  0%{box-shadow:0 0 0 0 rgba(218,181,107,0);}
+  18%{box-shadow:0 0 0 3px rgba(218,181,107,.75);}
+  100%{box-shadow:0 0 0 16px rgba(218,181,107,0);}
+}
+.flash{animation:flashRing 1.5s ease-out;}
+
+/* nav: quick-jump button */
+.nav-right{display:flex;align-items:center;gap:clamp(14px,2vw,22px);}
+.palette-btn{
+  display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 10px;
+  border:1px solid var(--line);border-radius:8px;color:var(--ink-low);
+  font-family:var(--mono);font-size:11px;white-space:nowrap;
+  transition:border-color .2s ease,color .2s ease;
+}
+.palette-btn:hover{border-color:var(--purple-dim);color:var(--ink-hi);}
+.palette-btn svg{width:13px;height:13px;flex:none;}
+@media (max-width:1000px){.palette-btn .kbd{display:none;}}
+
+/* command palette */
+.palette{
+  position:fixed;inset:0;z-index:500;display:none;align-items:flex-start;justify-content:center;
+  padding:14vh 20px 20px;background:rgba(19,10,24,.62);backdrop-filter:blur(6px);
+}
+.palette.open{display:flex;}
+.palette-panel{
+  width:100%;max-width:520px;background:var(--surface-2);border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 30px 70px rgba(0,0,0,.55);overflow:hidden;animation:palIn .22s cubic-bezier(.22,1,.36,1);
+}
+@keyframes palIn{from{opacity:0;transform:translateY(-8px) scale(.98);}to{opacity:1;transform:none;}}
+.palette-field{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line);}
+.palette-prompt{font-family:var(--mono);color:var(--gold);font-size:14px;}
+.palette-input{
+  flex:1;min-width:0;background:none;border:none;outline:none;color:var(--ink-hi);
+  font-family:var(--mono);font-size:14px;caret-color:var(--pink);cursor:text;
+}
+.palette-input::placeholder{color:var(--ink-low);}
+.palette-list{max-height:min(52vh,380px);overflow-y:auto;padding:6px;}
+.palette-item{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:8px;
+  font-family:var(--mono);font-size:13px;color:var(--ink-mid);cursor:var(--cur-spark);
+}
+.palette-item .pi-kind{font-size:10.5px;color:var(--ink-low);}
+.palette-item.active{background:var(--surface);color:var(--ink-hi);box-shadow:inset 2px 0 0 var(--pink);}
+.palette-item.active .pi-kind{color:var(--gold);}
+.palette-empty{padding:14px 12px;font-family:var(--mono);font-size:12.5px;color:var(--ink-low);}
+.palette-foot{display:flex;gap:18px;padding:10px 18px;border-top:1px solid var(--line-soft);font-family:var(--mono);font-size:10.5px;color:var(--ink-low);}
+.palette-foot kbd{font-family:var(--mono);font-size:10px;color:var(--ink-mid);border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-right:5px;}
+@media (max-width:700px){.palette-foot{display:none;}.palette{padding-top:10vh;}}
+
+/* small confirmation toast (reuses easter-toast look) */
+.easter-toast.mini{max-width:240px;text-align:center;padding:12px 18px;}
+
+/* project story progress dots */
+.sv-dots{display:flex;justify-content:center;gap:4px;margin-top:14px;}
+.sv-dot{padding:8px 3px;}
+.sv-dot span{
+  display:block;width:8px;height:8px;border-radius:100px;background:var(--line);
+  transition:width .3s cubic-bezier(.22,1,.36,1), background-color .3s ease;
+}
+.sv-dot:hover span{background:var(--purple-dim);}
+.sv-dot[aria-current="true"] span{width:24px;background:var(--gold);}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width:860px){
@@ -583,6 +656,7 @@ footer p{margin:0;}
       </span>
       Siddhi Singh
     </a>
+    <div class="nav-right">
     <nav class="nav-links" id="navLinks">
       <a href="#about">About</a>
       <a href="#education">Education</a>
@@ -592,9 +666,14 @@ footer p{margin:0;}
       <a href="#activities">Activities</a>
       <a class="cta" href="#contact">Contact</a>
     </nav>
+    <button class="palette-btn" id="paletteBtn" type="button" aria-label="Quick jump (press /)" aria-haspopup="dialog">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.6"/><path d="M10.5 10.5 14 14"/></svg>
+      <span class="kbd" id="paletteKbd">Ctrl K</span>
+    </button>
     <button class="burger" id="burger" aria-label="Toggle navigation" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
+    </div>
   </div>
 </header>
 
@@ -630,17 +709,17 @@ footer p{margin:0;}
       </div>
 
       <div class="fact-card">
-        <div class="fc-head"><span class="fc-dot p"></span><span class="fc-dot pk"></span><span class="fc-dot g"></span><span class="fc-path">~/profile.json</span></div>
+        <div class="fc-head"><span class="fc-dot p"></span><span class="fc-dot pk"></span><span class="fc-dot g"></span><span class="fc-path">~/profile.json</span><span class="fc-hint">click a value to jump</span></div>
         <div><span class="fc-punc">{</span></div>
-        <div>&nbsp;&nbsp;<span class="fc-key">"role"</span><span class="fc-punc">:</span> <span class="fc-str">"B.Tech · DSAI · 3rd Year"</span><span class="fc-punc">,</span></div>
-        <div>&nbsp;&nbsp;<span class="fc-key">"institute"</span><span class="fc-punc">:</span> <span class="fc-str">"IIT Bhilai"</span><span class="fc-punc">,</span></div>
+        <div>&nbsp;&nbsp;<span class="fc-key">"role"</span><span class="fc-punc">:</span> <a class="fc-link" href="#about"><span class="fc-str">"B.Tech · DSAI · 3rd Year"</span></a><span class="fc-punc">,</span></div>
+        <div>&nbsp;&nbsp;<span class="fc-key">"institute"</span><span class="fc-punc">:</span> <a class="fc-link" href="#edu-card"><span class="fc-str">"IIT Bhilai"</span></a><span class="fc-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="fc-key">"location"</span><span class="fc-punc">:</span> <span class="fc-str">"Mumbai, India"</span><span class="fc-punc">,</span></div>
-        <div>&nbsp;&nbsp;<span class="fc-key">"cgpa"</span><span class="fc-punc">:</span> <span class="fc-str">"8.71 / 10"</span><span class="fc-punc">,</span></div>
+        <div>&nbsp;&nbsp;<span class="fc-key">"cgpa"</span><span class="fc-punc">:</span> <a class="fc-link" href="#edu-card"><span class="fc-str">"8.71 / 10"</span></a><span class="fc-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="fc-key">"semester"</span><span class="fc-punc">:</span> <span class="fc-str">"5th"</span><span class="fc-punc">,</span></div>
-        <div>&nbsp;&nbsp;<span class="fc-key">"recent"</span><span class="fc-punc">:</span> <span class="fc-str">"Flipkart Mentee"</span><span class="fc-punc">,</span></div>
+        <div>&nbsp;&nbsp;<span class="fc-key">"recent"</span><span class="fc-punc">:</span> <a class="fc-link" href="#ach-flipkart"><span class="fc-str">"Flipkart Mentee"</span></a><span class="fc-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="fc-key">"active_in"</span><span class="fc-punc">:</span> <span class="fc-arr">[</span></div>
-        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fc-str">"OpenLake"</span><span class="fc-punc">,</span> <span class="fc-str">"DesignX"</span><span class="fc-punc">,</span></div>
-        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fc-str">"GDG"</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<a class="fc-link" href="#act-openlake"><span class="fc-str">"OpenLake"</span></a><span class="fc-punc">,</span> <a class="fc-link" href="#act-designx"><span class="fc-str">"DesignX"</span></a><span class="fc-punc">,</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<a class="fc-link" href="#act-gdg"><span class="fc-str">"GDG"</span></a></div>
         <div>&nbsp;&nbsp;<span class="fc-arr">]</span><span class="fc-punc">,</span></div>
         <details class="fc-details">
           <summary><span class="fc-key">"fun_facts"</span><span class="fc-punc">:</span> <span class="fc-arr">[&hellip;]</span><span class="fc-toggle" aria-hidden="true">&#9656;</span></summary>
@@ -698,7 +777,7 @@ footer p{margin:0;}
       </div>
       <div class="stat-strip reveal d2">
         <div class="stat-box"><b>8.71</b><span>CGPA / 10</span></div>
-        <div class="stat-box"><b>Top 200</b><span>of 27,000+· Flipkart</span></div>
+        <div class="stat-box"><b>Top 200</b><span>of 27,000+ · Flipkart</span></div>
         <div class="stat-box"><b>4</b><span>Leadership &amp; mentor roles</span></div>
         <div class="stat-box"><b>2</b><span>AI systems shipped</span></div>
         <div class="stat-box"><b>250+</b><span>Problems solved on LeetCode</span></div>
@@ -714,7 +793,7 @@ footer p{margin:0;}
       <div class="eyebrow">Education</div>
       <h2 class="sec-title">Where I <em class="hl-purple">study</em></h2>
     </div>
-    <div class="edu-card reveal d1">
+    <div class="edu-card reveal d1" id="edu-card">
       <div class="edu-top">
         <div>
           <div class="edu-degree">Indian Institute of Technology, Bhilai</div>
@@ -770,19 +849,20 @@ footer p{margin:0;}
             </div>
 
           </div>
+          <div class="sv-dots" role="group" aria-label="Project story steps"></div>
         </div>
 
         <div class="story-track">
-          <div class="story-beat active" data-beat="1">
+          <div class="story-beat active" data-beat="1" data-label="Overview">
             <span class="beat-num">01</span>
             <h3>Cloud Task Failure Prediction</h3>
             <p class="beat-teaser">An ML system predicting cloud task failures before they happen, trained on real Google Cloud Trace data.</p>
           </div>
-          <div class="story-beat" data-beat="2">
+          <div class="story-beat" data-beat="2" data-label="Results">
             <span class="beat-num">02</span>
             <p>Evaluated multiple models on Google Cloud Trace data &mdash; Random Forest hit 93% accuracy, 0.93 F1. Deployed as a containerized FastAPI service.</p>
           </div>
-          <div class="story-beat" data-beat="3">
+          <div class="story-beat" data-beat="3" data-label="Deployment">
             <span class="beat-num">03</span>
             <p>Streamlit dashboard with CSV upload and a live demo mode via Redis Pub/Sub. Deployed on Render &mdash; real-time cloud monitoring, not a static notebook.</p>
           </div>
@@ -819,19 +899,20 @@ footer p{margin:0;}
             </div>
 
           </div>
+          <div class="sv-dots" role="group" aria-label="Project story steps"></div>
         </div>
 
         <div class="story-track">
-          <div class="story-beat active" data-beat="1">
+          <div class="story-beat active" data-beat="1" data-label="Overview">
             <span class="beat-num">01</span>
             <h3>HostelDesk &mdash; AI Complaint Management</h3>
             <p class="beat-teaser">A full-stack complaint system for hostel life, with an LLM doing the triage most teams do by hand.</p>
           </div>
-          <div class="story-beat" data-beat="2">
+          <div class="story-beat" data-beat="2" data-label="AI pipeline">
             <span class="beat-num">02</span>
             <p>An LLM pipeline auto-categorizes complaints, scores priority, and flags duplicates with contextual reasoning &mdash; cutting redundant tickets.</p>
           </div>
-          <div class="story-beat" data-beat="3">
+          <div class="story-beat" data-beat="3" data-label="Stack">
             <span class="beat-num">03</span>
             <p>React + Vite, FastAPI, Supabase, deployed on Vercel and Render. Real-time notifications and community upvoting surface high-priority complaints.</p>
           </div>
@@ -866,7 +947,7 @@ footer p{margin:0;}
       <h2 class="sec-title">Selected, out of <em class="hl-purple">thousands</em></h2>
     </div>
     <div class="timeline reveal d1">
-      <div class="tl-item">
+      <div class="tl-item" id="ach-flipkart">
         <div class="tl-when">Jan 2026 &ndash; Mar 2026</div>
         <div>
           <div class="tl-role">Flipkart</div>
@@ -887,12 +968,12 @@ footer p{margin:0;}
       <p class="sec-intro">Most of my time outside coursework and projects goes into mentoring the next batch of builders.</p>
     </div>
     <div class="activity-grid reveal d1">
-      <div class="activity-item">
+      <div class="activity-item" id="act-openlake">
         <div class="activity-role">OpenLake &mdash; Open Source Society</div>
         <span class="activity-org">Mentor, AI/ML Domain &middot; IIT Bhilai &middot; Apr 2026 &ndash; Present</span>
         <p>Contributing to open source projects and guiding sessions on AI/ML for the college community.</p>
       </div>
-      <div class="activity-item pink">
+      <div class="activity-item pink" id="act-gdg">
         <div class="activity-role">Google Developer Group</div>
         <span class="activity-org">Core Member &middot; IIT Bhilai &middot; Oct 2025 &ndash; Apr 2026</span>
         <p>Collaborated on organizing technical workshops for GDG, fostering hands-on learning and community engagement.</p>
@@ -902,7 +983,7 @@ footer p{margin:0;}
         <span class="activity-org">Mentor &middot; IIT Bhilai &middot; Jun 2025 &ndash; Aug 2025</span>
         <p>Mentored junior students and developed the Polaris website, making updates to the data and interface.</p>
       </div>
-      <div class="activity-item pink">
+      <div class="activity-item pink" id="act-designx">
         <div class="activity-role">DesignX &mdash; Design Club</div>
         <span class="activity-org">UI/UX Head &middot; IIT Bhilai &middot; Apr 2026 &ndash; Present</span>
         <p>Designed intuitive, user-friendly websites and conducted sessions on UI/UX design principles and best practices.</p>
@@ -928,7 +1009,6 @@ footer p{margin:0;}
       <p>Open to mentorship conversations, collaborations on AI/ML projects, or just a chat about what I'm building. My inbox is the fastest way to reach me.</p>
       <div class="contact-methods">
         <a class="primary" href="mailto:siddhiwrite@gmail.com">siddhiwrite@gmail.com</a>
-        <a href="tel:+918584833700">+91 85848 33700</a>
       </div>
       <div class="contact-social">
         <a href="https://www.linkedin.com/in/siddhi-singh-33170323a/" target="_blank" rel="noopener">LinkedIn</a>
@@ -950,7 +1030,27 @@ footer p{margin:0;}
   <p><strong>Ok, you found it.</strong> &#127370; True story &mdash; I've got an Emerging Player award from an intra-college sports meet, table tennis is the one I take a little too seriously. Also: yes, I really did overengineer a click counter into my own logo.</p>
 </div>
 
+<div class="easter-toast mini" id="miniToast" role="status" aria-live="polite"></div>
+
+<div class="palette" id="palette" role="dialog" aria-modal="true" aria-label="Quick jump">
+  <div class="palette-panel">
+    <div class="palette-field">
+      <span class="palette-prompt" aria-hidden="true">&gt;</span>
+      <input class="palette-input" id="paletteInput" type="text" placeholder="Jump to a section or action" autocomplete="off" spellcheck="false"
+             role="combobox" aria-expanded="true" aria-controls="paletteList" aria-autocomplete="list"/>
+    </div>
+    <ul class="palette-list" id="paletteList" role="listbox" aria-label="Results"></ul>
+    <div class="palette-foot" aria-hidden="true">
+      <span><kbd>&uarr;</kbd><kbd>&darr;</kbd>move</span>
+      <span><kbd>enter</kbd>select</span>
+      <span><kbd>esc</kbd>close</span>
+    </div>
+  </div>
+</div>
+
 <script>
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /* ---------- footer year ---------- */
 document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -1027,20 +1127,47 @@ const spy = new IntersectionObserver((entries) => {
 }, { rootMargin: '-45% 0px -50% 0px' });
 sections.forEach(s => spy.observe(s));
 
-/* ---------- project story beats ---------- */
+/* ---------- project story beats + progress dots ---------- */
 document.querySelectorAll('.story-project').forEach(project => {
-  const beats = project.querySelectorAll('.story-beat');
+  const beats = [...project.querySelectorAll('.story-beat')];
   const states = project.querySelectorAll('.sv-state');
-  const beatSpy = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const n = entry.target.dataset.beat;
-        beats.forEach(b => b.classList.toggle('active', b === entry.target));
-        states.forEach(s => s.classList.toggle('active', s.classList.contains('sv-state-' + n)));
-      }
+  const visual = project.querySelector('.story-visual');
+  const dotsWrap = project.querySelector('.sv-dots');
+  const dots = [];
+
+  function setActive(n){
+    n = String(n);
+    beats.forEach(b => b.classList.toggle('active', b.dataset.beat === n));
+    states.forEach(s => s.classList.toggle('active', s.classList.contains('sv-state-' + n)));
+    dots.forEach((d, i) => d.setAttribute('aria-current', String(String(i + 1) === n)));
+  }
+
+  if(dotsWrap){
+    beats.forEach((beat, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'sv-dot';
+      btn.title = beat.dataset.label || ('Part ' + (i + 1));
+      btn.setAttribute('aria-label', 'Show part ' + (i + 1) + ' of ' + beats.length + (beat.dataset.label ? ': ' + beat.dataset.label : ''));
+      btn.innerHTML = '<span></span>';
+      btn.addEventListener('click', () => {
+        setActive(beat.dataset.beat);
+        // desktop: the visual is sticky, so scroll the matching text into view.
+        // mobile: the visual sits above the text, so just switch it in place.
+        if(getComputedStyle(visual).position === 'sticky'){
+          beat.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+        }
+      });
+      dotsWrap.appendChild(btn);
+      dots.push(btn);
     });
+  }
+
+  const beatSpy = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) setActive(entry.target.dataset.beat); });
   }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
   beats.forEach(b => beatSpy.observe(b));
+  setActive(1);
 });
 
 /* ---------- typewriter status line ---------- */
@@ -1052,7 +1179,6 @@ const STATUS_LINES = [
   '250+ problems solved on LeetCode'
 ];
 const statusEl = document.getElementById('status-text');
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function typewriter(){
   let lineIdx = 0, charIdx = 0, deleting = false;
@@ -1133,13 +1259,17 @@ function buildOrbitGrid(){
 }
 buildOrbitGrid();
 
-/* ---------- ambient particle field ---------- */
+/* ---------- ambient particle field (reacts to the cursor) ---------- */
 (function(){
   const canvas = document.getElementById('particle-field');
   const ctx = canvas.getContext('2d');
   const hero = document.getElementById('hero');
-  let particles = [];
   const COLORS = ['180,148,227', '230,147,172', '218,181,107']; // purple, pink, gold (rgb)
+  const REPEL_R = 90;    // particles drift away inside this radius
+  const LINK_R  = 185;   // only particles this close to the cursor get linked
+  const LINK_D  = 110;   // max distance between two linked particles
+  const mouse = { x: 0, y: 0, active: false };
+  let particles = [], running = false, rafId = null;
 
   function resize(){
     canvas.width = hero.offsetWidth;
@@ -1148,23 +1278,62 @@ buildOrbitGrid();
 
   function makeParticles(){
     const count = Math.min(58, Math.floor(canvas.width / 20));
-    particles = Array.from({length: count}, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: 1.3 + Math.random() * 2.3,
-      vx: (Math.random() - 0.5) * 0.14,
-      vy: (Math.random() - 0.5) * 0.14,
-      c: COLORS[Math.floor(Math.random() * COLORS.length)],
-      a: 0.24 + Math.random() * 0.34
-    }));
+    particles = Array.from({length: count}, () => {
+      const bvx = (Math.random() - 0.5) * 0.14, bvy = (Math.random() - 0.5) * 0.14;
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: 1.3 + Math.random() * 2.3,
+        vx: bvx, vy: bvy, bvx, bvy,
+        c: COLORS[Math.floor(Math.random() * COLORS.length)],
+        a: 0.24 + Math.random() * 0.34
+      };
+    });
+  }
+
+  function move(){
+    particles.forEach(p => {
+      if(mouse.active){
+        const dx = p.x - mouse.x, dy = p.y - mouse.y;
+        const d2 = dx * dx + dy * dy;
+        if(d2 < REPEL_R * REPEL_R && d2 > 0.01){
+          const d = Math.sqrt(d2), f = (1 - d / REPEL_R) * 0.35;
+          p.vx += (dx / d) * f;
+          p.vy += (dy / d) * f;
+        }
+      }
+      // ease back toward each particle's own slow drift
+      p.vx = p.vx * 0.92 + p.bvx * 0.08;
+      p.vy = p.vy * 0.92 + p.bvy * 0.08;
+      p.x += p.vx; p.y += p.vy;
+      if(p.x < 0) p.x = canvas.width; if(p.x > canvas.width) p.x = 0;
+      if(p.y < 0) p.y = canvas.height; if(p.y > canvas.height) p.y = 0;
+    });
   }
 
   function draw(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // faint constellation lines around the cursor
+    if(mouse.active){
+      const near = particles.filter(p => {
+        const dx = p.x - mouse.x, dy = p.y - mouse.y;
+        return dx * dx + dy * dy < LINK_R * LINK_R;
+      });
+      ctx.lineWidth = 1;
+      for(let i = 0; i < near.length; i++){
+        for(let j = i + 1; j < near.length; j++){
+          const a = near[i], b = near[j];
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          if(d < LINK_D){
+            ctx.strokeStyle = `rgba(${a.c},${(1 - d / LINK_D) * 0.3})`;
+            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+      }
+    }
+
     particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy;
-      if(p.x < 0) p.x = canvas.width; if(p.x > canvas.width) p.x = 0;
-      if(p.y < 0) p.y = canvas.height; if(p.y > canvas.height) p.y = 0;
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
       ctx.shadowBlur = p.r * 2.4;
@@ -1173,13 +1342,189 @@ buildOrbitGrid();
       ctx.fill();
     });
     ctx.shadowBlur = 0;
-    if(!reduceMotion) requestAnimationFrame(draw);
   }
+
+  function loop(){
+    move(); draw();
+    rafId = running ? requestAnimationFrame(loop) : null;
+  }
+  function start(){ if(running || reduceMotion) return; running = true; rafId = requestAnimationFrame(loop); }
+  function stop(){ running = false; if(rafId) cancelAnimationFrame(rafId); rafId = null; }
+
+  hero.addEventListener('pointermove', (e) => {
+    if(e.pointerType !== 'mouse') return;
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+    mouse.active = true;
+  });
+  hero.addEventListener('pointerleave', () => { mouse.active = false; });
+
+  // only animate while the hero is on screen
+  new IntersectionObserver((entries) => {
+    entries.forEach(entry => entry.isIntersecting ? start() : stop());
+  }).observe(hero);
 
   resize();
   makeParticles();
   draw();
-  window.addEventListener('resize', () => { resize(); makeParticles(); });
+  window.addEventListener('resize', () => { resize(); makeParticles(); draw(); });
+})();
+
+/* ---------- small confirmation toast ---------- */
+const miniToast = document.getElementById('miniToast');
+let miniTimer;
+function showToast(text){
+  miniToast.textContent = text;
+  miniToast.classList.add('show');
+  clearTimeout(miniTimer);
+  miniTimer = setTimeout(() => miniToast.classList.remove('show'), 2200);
+}
+
+/* ---------- profile.json values jump to their section ---------- */
+document.querySelectorAll('.fc-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if(!target) return;
+    e.preventDefault();
+    target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    setTimeout(() => {
+      target.classList.remove('flash');
+      void target.offsetWidth; // restart the animation if clicked twice
+      target.classList.add('flash');
+      target.addEventListener('animationend', () => target.classList.remove('flash'), { once: true });
+    }, reduceMotion ? 0 : 650);
+  });
+});
+
+/* ---------- command palette ( / or Ctrl/Cmd + K ) ---------- */
+(function(){
+  const EMAIL = 'siddhiwrite@gmail.com';
+  const palette = document.getElementById('palette');
+  const input = document.getElementById('paletteInput');
+  const list = document.getElementById('paletteList');
+  const openBtn = document.getElementById('paletteBtn');
+  const kbd = document.getElementById('paletteKbd');
+  const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  if(kbd) kbd.textContent = isMac ? '\u2318K' : 'Ctrl K';
+
+  const goTo = (id) => () => {
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+  };
+  const openUrl = (url) => () => window.open(url, '_blank', 'noopener');
+
+  async function copyEmail(){
+    try{
+      await navigator.clipboard.writeText(EMAIL);
+      showToast('Email copied');
+    }catch(_){
+      const t = document.createElement('textarea');
+      t.value = EMAIL; t.setAttribute('readonly', '');
+      t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select();
+      let ok = false; try{ ok = document.execCommand('copy'); }catch(__){}
+      t.remove();
+      showToast(ok ? 'Email copied' : EMAIL);
+    }
+  }
+
+  const COMMANDS = [
+    { label: 'About',        kind: 'section', keys: 'bio me intro',              run: goTo('about') },
+    { label: 'Education',    kind: 'section', keys: 'iit bhilai cgpa college',   run: goTo('education') },
+    { label: 'Projects',     kind: 'section', keys: 'work hosteldesk cloud',     run: goTo('projects') },
+    { label: 'Skills',       kind: 'section', keys: 'stack tech languages tools',run: goTo('skills') },
+    { label: 'Achievements', kind: 'section', keys: 'flipkart awards',           run: goTo('achievements') },
+    { label: 'Activities',   kind: 'section', keys: 'openlake gdg designx sports leadership', run: goTo('activities') },
+    { label: 'Contact',      kind: 'section', keys: 'reach hire talk',           run: goTo('contact') },
+    { label: 'Copy email address', kind: 'copy', keys: 'mail contact',          run: copyEmail },
+    { label: 'Write me an email',  kind: 'email', keys: 'mail contact',         run: () => { location.href = 'mailto:' + EMAIL; } },
+    { label: 'Open GitHub',   kind: 'link', keys: 'code repos',                  run: openUrl('https://github.com/siddhisingh9') },
+    { label: 'Open LinkedIn', kind: 'link', keys: 'profile network',             run: openUrl('https://www.linkedin.com/in/siddhi-singh-33170323a/') },
+    { label: 'Open LeetCode', kind: 'link', keys: 'dsa problems',                run: openUrl('https://leetcode.com/u/siddhi_singh9/') },
+    { label: 'Back to top',   kind: 'scroll', keys: 'home hero start',           run: goTo('hero') }
+  ];
+
+  let results = COMMANDS, active = 0, lastFocus = null;
+
+  function filter(q){
+    const terms = q.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    if(!terms.length) return COMMANDS;
+    return COMMANDS.filter(c => {
+      const hay = (c.label + ' ' + c.kind + ' ' + c.keys).toLowerCase();
+      return terms.every(t => hay.includes(t));
+    });
+  }
+
+  function render(){
+    list.innerHTML = '';
+    if(!results.length){
+      const li = document.createElement('li');
+      li.className = 'palette-empty';
+      li.textContent = 'Nothing matches. Try "projects" or "email".';
+      list.appendChild(li);
+      input.removeAttribute('aria-activedescendant');
+      return;
+    }
+    results.forEach((c, i) => {
+      const li = document.createElement('li');
+      li.className = 'palette-item' + (i === active ? ' active' : '');
+      li.id = 'pal-opt-' + i;
+      li.setAttribute('role', 'option');
+      li.setAttribute('aria-selected', String(i === active));
+      li.innerHTML = `<span></span><span class="pi-kind">${c.kind}</span>`;
+      li.firstChild.textContent = c.label;
+      li.addEventListener('mousemove', () => { if(active !== i){ active = i; render(); } });
+      li.addEventListener('click', () => runAt(i));
+      list.appendChild(li);
+    });
+    input.setAttribute('aria-activedescendant', 'pal-opt-' + active);
+    const el = document.getElementById('pal-opt-' + active);
+    if(el) el.scrollIntoView({ block: 'nearest' });
+  }
+
+  function isOpen(){ return palette.classList.contains('open'); }
+  function open(){
+    if(isOpen()) return;
+    lastFocus = document.activeElement;
+    palette.classList.add('open');
+    input.value = '';
+    results = COMMANDS; active = 0;
+    render();
+    input.focus();
+  }
+  function close(){
+    palette.classList.remove('open');
+    if(lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+  }
+  function runAt(i){
+    const cmd = results[i];
+    if(!cmd) return;
+    close();
+    cmd.run();
+  }
+
+  input.addEventListener('input', () => { results = filter(input.value); active = 0; render(); });
+  input.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowDown'){ e.preventDefault(); if(results.length){ active = (active + 1) % results.length; render(); } }
+    else if(e.key === 'ArrowUp'){ e.preventDefault(); if(results.length){ active = (active - 1 + results.length) % results.length; render(); } }
+    else if(e.key === 'Enter'){ e.preventDefault(); runAt(active); }
+    else if(e.key === 'Escape'){ e.preventDefault(); close(); }
+    else if(e.key === 'Tab'){ e.preventDefault(); } // keep focus inside the dialog
+  });
+  palette.addEventListener('mousedown', (e) => { if(e.target === palette) close(); });
+  openBtn.addEventListener('click', open);
+
+  document.addEventListener('keydown', (e) => {
+    const typing = e.target && e.target.closest && e.target.closest('input, textarea, select, [contenteditable="true"]');
+    if((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)){
+      e.preventDefault();
+      isOpen() ? close() : open();
+    } else if(e.key === '/' && !typing && !isOpen()){
+      e.preventDefault();
+      open();
+    }
+  });
 })();
 </script>
 </body>
