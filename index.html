@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Siddhi Singh - Software, AI, and the interfaces in between</title>
-<meta name="description" content="Siddhi Singh — B.Tech Data Science &amp; AI student at IIT Bhilai. ML systems, agentic pipelines, and AI/ML mentorship."/>
+<meta name="description" content="Siddhi Singh — B.Tech Data Science &amp; AI student at IIT Bhilai. LLM agents, LLM security and red-teaming, multimodal ML, and AI/ML mentorship."/>
 <!-- Link previews (LinkedIn, WhatsApp, X, Slack...). og-image.png must sit next to this file. -->
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Siddhi Singh"/>
@@ -307,68 +307,222 @@ section.block.alt{background:var(--bg-soft);border-top:1px solid var(--line-soft
 .tl-item p{font-size:14.5px;color:var(--ink-mid);line-height:1.7;}
 
 /* ============================================================
-   PROJECTS — scroll storytelling
+   PROJECTS — main carousel + "more projects" strip
    ============================================================ */
-.story-projects{display:flex;flex-direction:column;gap:110px;}
-.story-project{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;}
-
-.story-visual{position:sticky;top:96px;}
-.sv-inner{
-  position:relative;height:360px;background:var(--surface);border:1px solid var(--line);
-  border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.35);
+#projects{overflow:hidden;}
+.pc-head{margin-bottom:26px;}
+.pc-head .sec-title{margin-bottom:24px;}
+.pc-tabs{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:2px;}
+.pc-tabs::-webkit-scrollbar{display:none;}
+.pc-tab{
+  position:relative;flex:none;display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:12.5px;color:var(--ink-low);white-space:nowrap;
+  padding:10px 18px;border-radius:100px;border:1px solid var(--line);background:transparent;overflow:hidden;
+  transition:color .25s ease,border-color .25s ease,background-color .25s ease;
 }
-.sv-state{
-  position:absolute;inset:0;padding:34px;display:flex;flex-direction:column;justify-content:center;align-items:center;
-  text-align:center;opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease;pointer-events:none;
+.pc-tab .n{font-size:10.5px;color:var(--ink-low);transition:color .25s ease;}
+.pc-tab:hover{color:var(--ink-hi);border-color:var(--purple-dim);}
+.pc-tab[aria-selected="true"]{color:var(--ink-hi);border-color:var(--pink);background:var(--surface-2);}
+.pc-tab[aria-selected="true"] .n{color:var(--gold);}
+
+.pc{--cw:min(880px, 86vw);position:relative;}
+.pc-stage{position:relative;}
+/* big arrows sitting on the edges of the centred card */
+.pc-side{
+  position:absolute;top:50%;z-index:5;width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--surface-2);border:1px solid var(--gold-dim);color:var(--gold);
+  box-shadow:0 12px 30px rgba(0,0,0,.45);
+  transform:translate(-50%,-50%);
+  transition:transform .3s cubic-bezier(.22,1,.36,1),opacity .3s ease,border-color .2s ease,background-color .2s ease;
 }
-.sv-state.active{opacity:1;transform:none;pointer-events:auto;}
-
-.sv-date{font-family:var(--mono);font-size:11.5px;color:var(--ink-low);margin-bottom:12px;}
-.sv-title{font-family:var(--serif);font-size:27px;color:var(--ink-hi);line-height:1.25;max-width:280px;}
-.sv-mark{margin-top:22px;width:44px;height:44px;border-radius:12px;}
-.sv-mark.p{background:var(--purple-deep);}
-.sv-mark.pk{background:var(--pink);}
-
-.sv-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:16px;}
-.sv-stack{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
-
-.gauge{position:relative;width:150px;height:150px;margin:0 auto 16px;}
-.gauge svg{width:100%;height:100%;transform:rotate(-90deg);}
-.gauge-track{fill:none;stroke:var(--line);stroke-width:9;}
-.gauge-fill{
-  fill:none;stroke:var(--gold);stroke-width:9;stroke-linecap:round;
-  stroke-dasharray:327;stroke-dashoffset:327;transition:stroke-dashoffset 1.2s cubic-bezier(.22,1,.36,1) .1s;
+.pc-side svg{width:20px;height:20px;}
+.pc-side.prev{left:calc((100% - var(--cw)) / 2);}
+.pc-side.next{left:calc((100% + var(--cw)) / 2);}
+.pc-side:hover{border-color:var(--gold);background:var(--surface);transform:translate(-50%,-50%) scale(1.08);}
+.pc-side:disabled{opacity:0;pointer-events:none;transform:translate(-50%,-50%) scale(.7);}
+.pc-side.hint::after{
+  content:'';position:absolute;inset:-1px;border-radius:50%;border:1px solid var(--gold);
+  animation:sideRing 1.8s ease-out infinite;
 }
-.sv-state.active .gauge-fill{stroke-dashoffset:23;}
-.gauge-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.gauge-label b{font-family:var(--serif);font-size:30px;color:var(--ink-hi);}
-.gauge-label span{font-family:var(--mono);font-size:10px;color:var(--ink-low);text-transform:uppercase;letter-spacing:.06em;}
-.gauge-sub{font-family:var(--mono);font-size:12px;color:var(--ink-mid);}
-.gauge-sub b{color:var(--gold);}
+@keyframes sideRing{0%{transform:scale(1);opacity:.8;}100%{transform:scale(1.6);opacity:0;}}
+.pc-side-label{
+  position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:10.5px;color:var(--ink-mid);white-space:nowrap;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:100px;padding:4px 10px;
+  opacity:0;transition:opacity .2s ease;pointer-events:none;
+}
+.pc-side:hover .pc-side-label,.pc-side:focus-visible .pc-side-label{opacity:1;}
+.pc-card:not(.is-active) .pc-inner{cursor:var(--cur-spark);}
+.pc-track.nudge .pc-card{animation:pcNudge 1.2s cubic-bezier(.45,0,.2,1);}
+@keyframes pcNudge{0%,100%{transform:none;}40%{transform:translateX(-60px);}}
+.pc-track{
+  display:flex;gap:26px;overflow-x:auto;overflow-y:visible;position:relative;
+  scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;
+  padding:14px calc((100% - var(--cw)) / 2) 26px;
+  cursor:grab;outline:none;
+}
+.pc-track::-webkit-scrollbar{display:none;}
+.pc-track.dragging{cursor:grabbing;scroll-snap-type:none;user-select:none;}
+.pc-track:focus-visible .pc-card.is-active .pc-inner{box-shadow:0 0 0 2px var(--pink),0 30px 70px rgba(0,0,0,.4);}
+.pc-card{flex:0 0 var(--cw);scroll-snap-align:center;perspective:1400px;}
+.pc-inner{
+  height:100%;display:grid;grid-template-columns:1fr 1.15fr;
+  background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;
+  box-shadow:0 30px 70px rgba(0,0,0,.4);
+  transform-origin:center;will-change:transform,opacity;
+}
+.pc-track.dragging a{pointer-events:none;}
 
-.sv-caps{display:flex;flex-direction:column;gap:12px;align-items:flex-start;}
-.sv-cap{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13.5px;color:var(--ink-hi);}
-.sv-cap-dot{width:8px;height:8px;border-radius:50%;flex:none;}
-.sv-cap-dot.p{background:var(--purple);}
-.sv-cap-dot.pk{background:var(--pink);}
-.sv-cap-dot.g{background:var(--gold);}
+/* left: the animated visual */
+.pc-vis{
+  position:relative;padding:34px 30px;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  background:var(--surface-2);border-right:1px solid var(--line-soft);overflow:hidden;min-height:400px;
+}
+.pc-vis::before{
+  content:'';position:absolute;width:320px;height:320px;border-radius:50%;filter:blur(70px);opacity:.22;
+  top:-110px;left:-90px;background:var(--glow,var(--purple));transition:opacity .8s ease;
+}
+.pc-card.is-active .pc-vis::before{opacity:.38;}
+.pc-vis > *{position:relative;}
+.pc-vis-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-low);margin-bottom:22px;}
 
-.story-track{display:flex;flex-direction:column;}
-.story-beat{min-height:62vh;display:flex;flex-direction:column;justify-content:center;padding:16px 0;opacity:.32;transition:opacity .4s ease;}
-.story-beat:first-child{min-height:auto;padding-top:0;padding-bottom:48px;}
-.story-beat.active{opacity:1;}
-.beat-num{font-family:var(--mono);font-size:12px;color:var(--gold);margin-bottom:10px;display:block;}
-.story-beat h3{font-family:var(--serif);font-size:29px;color:var(--ink-hi);line-height:1.25;margin-bottom:14px;}
-.beat-teaser{font-size:16px;color:var(--ink-mid);line-height:1.75;max-width:420px;}
-.story-beat p{font-size:15.5px;color:var(--ink-mid);line-height:1.85;max-width:440px;}
+/* RedRAG: before/after bars */
+.vbar{width:100%;max-width:290px;margin-bottom:24px;}
+.vbar:last-child{margin-bottom:0;}
+.vbar-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;}
+.vbar-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--ink-mid);}
+.vbar-num{font-family:var(--serif);font-size:34px;line-height:1;color:var(--gold);}
+.vbar-track{height:8px;border-radius:100px;background:var(--line);overflow:hidden;}
+.vbar-fill{
+  height:100%;width:var(--from);border-radius:100px;background:linear-gradient(90deg,var(--purple-deep),var(--pink));
+  transition:width 1.5s cubic-bezier(.22,1,.36,1) .35s;
+}
+.pc-card.is-active .vbar-fill{width:var(--to);}
+.vbar-foot{font-family:var(--mono);font-size:10px;color:var(--ink-low);margin-top:7px;}
 
+/* MPLMM: modality chips + big number */
+.modal-row{display:flex;gap:10px;margin-bottom:28px;}
+.modal-chip{
+  font-family:var(--mono);font-size:11.5px;padding:7px 14px;border-radius:100px;
+  border:1px solid var(--purple-dim);color:var(--ink-hi);transition:all .5s ease;
+}
+.pc-card.is-active .modal-chip.drop{animation:modalDrop 3.6s ease .3s both;}
+@keyframes modalDrop{
+  0%{border-style:solid;color:var(--ink-hi);}
+  20%,45%{border-style:dashed;border-color:var(--ink-low);color:var(--ink-low);background:transparent;}
+  70%,100%{border-style:solid;border-color:var(--gold);color:var(--gold);background:rgba(218,181,107,.1);}
+}
+.modal-cap{font-family:var(--mono);font-size:10px;color:var(--ink-low);margin:-18px 0 22px;height:14px;}
+.big-num{font-family:var(--serif);font-size:64px;line-height:1;color:var(--gold);}
+.big-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-low);margin:8px 0 20px;text-align:center;}
+.ticks{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--ink-mid);}
+.tick{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;color:transparent;font-size:12px;transition:all .3s ease;}
+.pc-card.is-active .tick{border-color:var(--pink);color:var(--pink);background:rgba(230,147,172,.1);}
+.pc-card.is-active .tick:nth-child(1){transition-delay:1.1s;}
+.pc-card.is-active .tick:nth-child(2){transition-delay:1.3s;}
+.pc-card.is-active .tick:nth-child(3){transition-delay:1.5s;}
+.pc-card.is-active .tick:nth-child(4){transition-delay:1.7s;}
+.ticks span:last-child{margin-left:6px;}
+
+/* HostelDesk: triage pipeline */
+.flow{position:relative;width:100%;max-width:270px;display:flex;flex-direction:column;gap:16px;}
+.flow-ticket{
+  font-family:var(--mono);font-size:11.5px;color:var(--ink-hi);background:var(--surface);border:1px solid var(--line);
+  border-radius:10px;padding:11px 14px;opacity:0;transform:translateX(-16px);transition:all .6s cubic-bezier(.22,1,.36,1) .2s;
+}
+.flow-ticket small{display:block;color:var(--ink-low);font-size:10px;margin-bottom:2px;}
+.pc-card.is-active .flow-ticket{opacity:1;transform:none;}
+.flow-step{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12.5px;color:var(--ink-low);transition:color .4s ease;}
+.flow-dot{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent;transition:all .4s ease;}
+.pc-card.is-active .flow-step{color:var(--ink-hi);}
+.pc-card.is-active .flow-step .flow-dot{border-color:var(--gold);color:var(--gold);background:rgba(218,181,107,.1);}
+.pc-card.is-active .flow-step:nth-of-type(2), .pc-card.is-active .flow-step:nth-of-type(2) .flow-dot{transition-delay:.8s;}
+.pc-card.is-active .flow-step:nth-of-type(3), .pc-card.is-active .flow-step:nth-of-type(3) .flow-dot{transition-delay:1.2s;}
+.pc-card.is-active .flow-step:nth-of-type(4), .pc-card.is-active .flow-step:nth-of-type(4) .flow-dot{transition-delay:1.6s;}
+.pc-card.is-active .flow-step:nth-of-type(5), .pc-card.is-active .flow-step:nth-of-type(5) .flow-dot{transition-delay:2s;}
+
+/* right: details */
+.pc-body{padding:34px 36px;display:flex;flex-direction:column;}
+.pc-meta{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-low);margin-bottom:10px;display:flex;gap:10px;flex-wrap:wrap;}
+.pc-meta .tag{color:var(--pink);}
+.pc-title{font-family:var(--serif);font-size:30px;line-height:1.15;color:var(--ink-hi);margin-bottom:12px;}
+.pc-sum{font-size:14.5px;line-height:1.7;color:var(--ink-mid);margin-bottom:16px;}
+.pc-points{display:grid;gap:8px;margin-bottom:20px;}
+.pc-points li{position:relative;padding-left:18px;font-size:13.6px;line-height:1.6;color:var(--ink-mid);}
+.pc-points li::before{content:'';position:absolute;left:0;top:.62em;width:7px;height:7px;border-radius:2px;background:var(--gold);transform:rotate(45deg);}
+.pc-points b{color:var(--ink-hi);font-weight:600;}
+.pc-stack{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:22px;}
 .mc-pill{font-family:var(--mono);font-size:10.5px;color:var(--ink-mid);border:1px solid var(--purple-dim);padding:4px 10px;border-radius:100px;}
+.pc-links{display:flex;gap:18px;margin-top:auto;font-family:var(--mono);font-size:12.5px;}
+.pc-links a{color:var(--gold);border-bottom:1px solid var(--gold-dim);padding-bottom:2px;transition:.2s ease;}
+.pc-links a:hover{color:var(--pink);border-color:var(--pink-dim);}
 
-.projects-foot{margin-top:8px;text-align:center;}
+/* staggered entrance of the details when a card becomes active */
+.pc-body > *{opacity:.35;transform:translateY(6px);transition:opacity .5s ease,transform .5s cubic-bezier(.22,1,.36,1);}
+.pc-card.is-active .pc-body > *{opacity:1;transform:none;}
+.pc-card.is-active .pc-body > *:nth-child(2){transition-delay:.05s;}
+.pc-card.is-active .pc-body > *:nth-child(3){transition-delay:.1s;}
+.pc-card.is-active .pc-body > *:nth-child(4){transition-delay:.15s;}
+.pc-card.is-active .pc-body > *:nth-child(5){transition-delay:.2s;}
+.pc-card.is-active .pc-body > *:nth-child(6){transition-delay:.25s;}
+
+.pc-dots{display:flex;justify-content:center;gap:4px;margin-top:6px;}
+.pc-dot{padding:8px 3px;}
+.pc-dot span{display:block;width:8px;height:8px;border-radius:100px;background:var(--line);transition:width .3s cubic-bezier(.22,1,.36,1),background-color .3s ease;}
+.pc-dot:hover span{background:var(--purple-dim);}
+.pc-dot[aria-current="true"] span{width:28px;background:var(--gold);}
+.pc-hint{text-align:center;font-family:var(--mono);font-size:10.5px;color:var(--ink-low);margin-top:4px;opacity:.7;}
+
+/* ---------- more projects: drifting strip ---------- */
+.more-head{margin-top:90px;margin-bottom:26px;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;}
+.more-head h3{font-family:var(--serif);font-size:clamp(24px,3vw,30px);color:var(--ink-hi);}
+.more-head h3 em{font-style:italic;color:var(--gold);}
+.more-head p{font-size:14px;color:var(--ink-low);max-width:420px;}
+.strip{
+  display:flex;gap:18px;overflow-x:auto;scrollbar-width:none;padding:10px 0 18px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+}
+.strip::-webkit-scrollbar{display:none;}
+.mp-card{
+  flex:0 0 300px;display:flex;flex-direction:column;
+  background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 22px 20px;
+  position:relative;overflow:hidden;
+  transition:transform .3s cubic-bezier(.22,1,.36,1),border-color .3s ease,box-shadow .3s ease;
+}
+.mp-card::before{content:'';position:absolute;left:0;top:0;right:0;height:3px;background:var(--accent,var(--purple));opacity:.8;}
+.mp-card:hover{transform:translateY(-5px);border-color:var(--purple-dim);box-shadow:0 20px 44px rgba(0,0,0,.35);}
+.mp-tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent,var(--purple));margin-bottom:10px;}
+.mp-title{font-family:var(--serif);font-size:22px;color:var(--ink-hi);line-height:1.2;margin-bottom:8px;}
+.mp-desc{font-size:13.2px;line-height:1.6;color:var(--ink-mid);margin-bottom:14px;}
+.mp-stat{font-family:var(--mono);font-size:11.5px;color:var(--gold);margin-bottom:14px;line-height:1.5;}
+.mp-stack{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.mp-links{display:flex;gap:16px;margin-top:auto;font-family:var(--mono);font-size:12px;}
+.mp-links a{color:var(--ink-hi);border-bottom:1px solid var(--line);padding-bottom:2px;transition:.2s ease;}
+.mp-links a:hover{color:var(--pink);border-color:var(--pink-dim);}
+
+.projects-foot{margin-top:30px;text-align:center;}
 .projects-foot a{
   font-family:var(--mono);font-size:13px;color:var(--gold);border-bottom:1px solid var(--gold-dim);padding-bottom:3px;
 }
 .projects-foot a:hover{color:var(--pink);border-color:var(--pink-dim);}
+
+@media (max-width:860px){
+  .pc{--cw:min(560px, 80vw);}
+  .pc-inner{grid-template-columns:1fr;}
+  .pc-vis{min-height:250px;border-right:none;border-bottom:1px solid var(--line-soft);padding:28px 22px;}
+  .pc-body{padding:26px 24px;}
+  .pc-title{font-size:25px;}
+  .pc-side{width:44px;height:44px;top:150px;}
+  .pc-side svg{width:17px;height:17px;}
+  .pc-side-label{display:none;}
+}
+@media (max-width:480px){
+  .pc-track{gap:14px;}
+  .big-num{font-size:52px;}
+  .mp-card{flex-basis:262px;}
+}
 
 /* ============================================================
    SKILLS — orbiting clusters
@@ -377,7 +531,7 @@ section.block.alt{background:var(--bg-soft);border-top:1px solid var(--line-soft
   display:grid;grid-template-columns:1fr 1fr;gap:8px 4px;
   justify-items:center;padding-top:4px;
 }
-.orbit-grid .orbit-cluster:nth-child(5){grid-column:1 / -1;}
+.orbit-grid .orbit-cluster:nth-child(7){grid-column:1 / -1;}
 
 .orbit-cluster{
   position:relative;width:clamp(260px,34vw,340px);height:clamp(260px,34vw,340px);
@@ -435,7 +589,7 @@ section.block.alt{background:var(--bg-soft);border-top:1px solid var(--line-soft
 
 @media (max-width:520px){
   .orbit-grid{grid-template-columns:1fr;}
-  .orbit-grid .orbit-cluster:nth-child(5){grid-column:auto;}
+  .orbit-grid .orbit-cluster:nth-child(7){grid-column:auto;}
 }
 
 /* fallback: static wrapped list on narrow screens or reduced motion */
@@ -542,7 +696,7 @@ footer p{margin:0;}
    INTERACTIVE ADDITIONS
    ============================================================ */
 /* jump targets clear the fixed nav */
-.edu-card,.tl-item,.activity-item,.story-beat{scroll-margin-top:96px;}
+.edu-card,.tl-item,.activity-item,.more-head{scroll-margin-top:96px;}
 
 /* profile.json values as links */
 .fc-comment{color:var(--ink-low);font-style:italic;opacity:.85;}
@@ -603,16 +757,6 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 .pf-secret{margin-left:auto;font-style:italic;opacity:.8;}
 
 
-/* project story progress dots */
-.sv-dots{display:flex;justify-content:center;gap:4px;margin-top:14px;}
-.sv-dot{padding:8px 3px;}
-.sv-dot span{
-  display:block;width:8px;height:8px;border-radius:100px;background:var(--line);
-  transition:width .3s cubic-bezier(.22,1,.36,1), background-color .3s ease;
-}
-.sv-dot:hover span{background:var(--purple-dim);}
-.sv-dot[aria-current="true"] span{width:24px;background:var(--gold);}
-
 /* ============================================================
    RESPONSIVE
    ============================================================ */
@@ -635,11 +779,6 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
     position:static;width:100%;margin:0;
   }
   .about-grid,.activity-grid{grid-template-columns:1fr;}
-  .story-project{grid-template-columns:1fr;gap:24px;}
-  .story-visual{position:static;top:auto;}
-  .sv-inner{height:280px;}
-  .story-beat{min-height:auto;padding:28px 0;}
-  .story-beat:first-child{padding-bottom:28px;}
   .tl-item{grid-template-columns:1fr;gap:6px;}
   .tl-when{order:-1;}
 }
@@ -663,7 +802,6 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 }
 @media (max-width:480px){
   .stat-strip{grid-template-columns:1fr;}
-  .sv-inner{height:320px;}
 }
 </style>
 </head>
@@ -721,7 +859,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
         <a class="btn ghost" href="#contact">Contact Me</a>
       </div>
       <div class="hero-links reveal in d3">
-        <a href="mailto:siddhiwrite@gmail.com">Email</a>
+        <a href="mailto:siddhis.personal@gmail.com">Email</a>
         <a href="https://www.linkedin.com/in/siddhi-singh-33170323a/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/siddhisingh9" target="_blank" rel="noopener">GitHub</a>
         <a href="https://leetcode.com/u/siddhi_singh9/" target="_blank" rel="noopener">LeetCode</a>
@@ -746,6 +884,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
         <div>&nbsp;&nbsp;<span class="fc-key">"location"</span><span class="fc-punc">:</span> <span class="fc-str">"Mumbai, India"</span><span class="fc-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="fc-key">"cgpa"</span><span class="fc-punc">:</span> <a class="fc-link" href="#edu-card"><span class="fc-str">"8.71 / 10"</span></a><span class="fc-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="fc-key">"semester"</span><span class="fc-punc">:</span> <span class="fc-str">"5th"</span><span class="fc-punc">,</span></div>
+        <div>&nbsp;&nbsp;<span class="fc-key">"latest_build"</span><span class="fc-punc">:</span> <a class="fc-link" href="#proj-redrag"><span class="fc-str">"RedRAG"</span></a><span class="fc-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="fc-key">"recent"</span><span class="fc-punc">:</span> <a class="fc-link" href="#ach-flipkart"><span class="fc-str">"Flipkart Mentee"</span></a><span class="fc-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="fc-key">"incoming"</span><span class="fc-punc">:</span> <a class="fc-link" href="#ach-hsbc"><span class="fc-str">"HSBC Intern '27"</span></a><span class="fc-punc">,</span></div>
         <div>&nbsp;&nbsp;<span class="fc-key">"active_in"</span><span class="fc-punc">:</span> <span class="fc-arr">[</span></div>
@@ -780,6 +919,8 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
           I'm Siddhi, a fifth-semester <strong>Data Science &amp; AI</strong> student at
           <strong>IIT Bhilai</strong>. Most of my work sits where ML meets engineering:
           training models, then turning them into services people can actually use.
+          Lately that means <strong>LLM security</strong> &mdash; agents that red-team RAG
+          chatbots &mdash; and research on multimodal models that hold up when a modality goes missing.
         </p>
 
         <p>
@@ -821,120 +962,184 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 <!-- ============ PROJECTS ============ -->
 <section class="block alt" id="projects">
   <div class="wrap">
-    <div class="reveal">
+    <div class="pc-head reveal">
       <div class="eyebrow">Projects</div>
       <h2 class="sec-title">Things I've <em class="hl-pink">shipped</em></h2>
-      <p class="sec-intro">Two systems, raw data to deployed product.</p>
+      <div class="pc-tabs" id="pcTabs" role="tablist" aria-label="Projects"></div>
     </div>
+  </div>
 
-    <div class="story-projects reveal d1">
+  <div class="pc reveal d1">
+    <div class="pc-stage">
+    <button class="pc-side prev" id="pcPrev" type="button" aria-label="Previous project">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg>
+      <span class="pc-side-label" id="pcPrevLabel"></span>
+    </button>
+    <button class="pc-side next" id="pcNext" type="button" aria-label="Next project">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 3 5 5-5 5"/></svg>
+      <span class="pc-side-label" id="pcNextLabel"></span>
+    </button>
+    <div class="pc-track" id="pcTrack" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Main projects">
 
-      <!-- Project 1 -->
-      <div class="story-project" data-project="p1">
-        <div class="story-visual">
-          <div class="sv-inner">
-
-            <div class="sv-state sv-state-1 active">
-              <span class="sv-date">Sept &ndash; Oct 2025</span>
-              <h3 class="sv-title">Cloud Task Failure Prediction</h3>
-              <span class="sv-mark p"></span>
+      <!-- RedRAG -->
+      <article class="pc-card" data-tab="RedRAG" id="proj-redrag" aria-roledescription="slide" aria-label="1 of 3: RedRAG">
+        <div class="pc-inner">
+          <div class="pc-vis" style="--glow:var(--pink)">
+            <span class="pc-vis-eyebrow">Attack success rate</span>
+            <div class="vbar">
+              <div class="vbar-top"><span class="vbar-label">Agent vs. rule-based defenses</span><span class="vbar-num" data-from="20" data-to="55" data-suffix="%">55%</span></div>
+              <div class="vbar-track"><div class="vbar-fill" style="--from:20%;--to:55%"></div></div>
+              <div class="vbar-foot">20% &rarr; 55% once the LangGraph agent rewrites failed attacks</div>
             </div>
-
-            <div class="sv-state sv-state-2">
-              <div class="gauge">
-                <svg viewBox="0 0 120 120">
-                  <circle class="gauge-track" cx="60" cy="60" r="52"/>
-                  <circle class="gauge-fill" cx="60" cy="60" r="52"/>
-                </svg>
-                <div class="gauge-label"><b>93%</b><span>Accuracy</span></div>
-              </div>
-              <div class="gauge-sub"><b>0.93</b> F1 Score &middot; Random Forest</div>
+            <div class="vbar">
+              <div class="vbar-top"><span class="vbar-label">With the DeBERTa guard</span><span class="vbar-num" data-from="85" data-to="0" data-suffix="%">0%</span></div>
+              <div class="vbar-track"><div class="vbar-fill" style="--from:85%;--to:0%"></div></div>
+              <div class="vbar-foot">85% &rarr; 0%, with 0% false refusals</div>
             </div>
-
-            <div class="sv-state sv-state-3">
-              <span class="sv-eyebrow">Built with</span>
-              <div class="sv-stack">
-                <span class="mc-pill">Python</span><span class="mc-pill">Scikit-learn</span><span class="mc-pill">Pandas</span>
-                <span class="mc-pill">Random Forest</span><span class="mc-pill">FastAPI</span><span class="mc-pill">Docker</span>
-                <span class="mc-pill">Streamlit</span><span class="mc-pill">Redis Pub/Sub</span>
-              </div>
+          </div>
+          <div class="pc-body">
+            <div class="pc-meta"><span>Nov 2026</span><span class="tag">LLM Security</span></div>
+            <h3 class="pc-title">RedRAG</h3>
+            <p class="pc-sum">An automated red-teaming agent that attacks a RAG chatbot with 55 attacks across 5 OWASP LLM Top 10 categories &mdash; prompt injection, system-prompt leakage, and data exfiltration.</p>
+            <ul class="pc-points">
+              <li>A <b>LangGraph agent</b> rewrites failed attacks, lifting success from 20% to 55%.</li>
+              <li>Fine-tuned <b>DeBERTa-v3-small</b> judge: 90% accuracy, Cohen&rsquo;s &kappa; 0.76 on a leakage-free split &mdash; reused as a guard.</li>
+              <li>Ships as a CLI, Streamlit dashboard, MCP server, and CI gate with <b>407 tests</b>.</li>
+            </ul>
+            <div class="pc-stack">
+              <span class="mc-pill">LangGraph</span><span class="mc-pill">FastAPI</span><span class="mc-pill">ChromaDB</span><span class="mc-pill">Ollama</span><span class="mc-pill">DeBERTa-v3</span><span class="mc-pill">MCP</span><span class="mc-pill">GitHub Actions</span>
             </div>
-
-          </div>
-          <div class="sv-dots" role="group" aria-label="Project story steps"></div>
-        </div>
-
-        <div class="story-track">
-          <div class="story-beat active" data-beat="1" data-label="Overview">
-            <span class="beat-num">01</span>
-            <h3>Cloud Task Failure Prediction</h3>
-            <p class="beat-teaser">An ML system predicting cloud task failures before they happen, trained on real Google Cloud Trace data.</p>
-          </div>
-          <div class="story-beat" data-beat="2" data-label="Results">
-            <span class="beat-num">02</span>
-            <p>Evaluated multiple models on Google Cloud Trace data &mdash; Random Forest hit 93% accuracy, 0.93 F1. Deployed as a containerized FastAPI service.</p>
-          </div>
-          <div class="story-beat" data-beat="3" data-label="Deployment">
-            <span class="beat-num">03</span>
-            <p>Streamlit dashboard with CSV upload and a live demo mode via Redis Pub/Sub. Deployed on Render &mdash; real-time cloud monitoring, not a static notebook.</p>
+            <div class="pc-links">
+              <a href="https://github.com/siddhisingh9/redrag" target="_blank" rel="noopener">GitHub &nearr;</a>
+              <a href="https://redrag.streamlit.app" target="_blank" rel="noopener">Live demo &nearr;</a>
+            </div>
           </div>
         </div>
-      </div>
+      </article>
 
-      <!-- Project 2 -->
-      <div class="story-project" data-project="p2">
-        <div class="story-visual">
-          <div class="sv-inner">
-
-            <div class="sv-state sv-state-1 active">
-              <span class="sv-date">Mar &ndash; Apr 2026</span>
-              <h3 class="sv-title">HostelDesk</h3>
-              <span class="sv-mark pk"></span>
+      <!-- MPLMM -->
+      <article class="pc-card" data-tab="Missing Modalities" id="proj-mplmm" aria-roledescription="slide" aria-label="2 of 3: Multimodal sentiment with missing modalities">
+        <div class="pc-inner">
+          <div class="pc-vis" style="--glow:var(--purple)">
+            <span class="pc-vis-eyebrow">When a modality goes missing</span>
+            <div class="modal-row" aria-hidden="true">
+              <span class="modal-chip">Text</span>
+              <span class="modal-chip">Audio</span>
+              <span class="modal-chip drop">Video</span>
             </div>
-
-            <div class="sv-state sv-state-2">
-              <span class="sv-eyebrow">What it does</span>
-              <div class="sv-caps">
-                <div class="sv-cap"><span class="sv-cap-dot pk"></span>AI Triage</div>
-                <div class="sv-cap"><span class="sv-cap-dot p"></span>Duplicate Detection</div>
-                <div class="sv-cap"><span class="sv-cap-dot g"></span>Live Notifications</div>
-              </div>
+            <div class="modal-cap" aria-hidden="true">missing &rarr; retrieved from similar samples</div>
+            <div class="big-num" data-from="0" data-to="7.03" data-prefix="+" data-decimals="2">+7.03</div>
+            <div class="big-label">avg weighted F1 &middot; audio/video only</div>
+            <div class="ticks"><span class="tick">&#10003;</span><span class="tick">&#10003;</span><span class="tick">&#10003;</span><span class="tick">&#10003;</span><span>4 / 4 benchmarks</span></div>
+          </div>
+          <div class="pc-body">
+            <div class="pc-meta"><span>Sept &ndash; Nov 2026</span><span class="tag">Multimodal ML</span></div>
+            <h3 class="pc-title">Sentiment &amp; Emotion with Missing Modalities</h3>
+            <p class="pc-sum">Extended MPLMM (ACL 2024) with retrieval-augmented and mixture-of-experts modules, so predictions stay accurate when text, audio, or video is missing.</p>
+            <ul class="pc-points">
+              <li><b>RAGPrompt</b> retrieves similar complete samples by cosine similarity to rebuild the missing modality.</li>
+              <li>Weighted F1 up on <b>all 4 datasets</b> (up to +4.91), via a zero-initialized gate on a frozen backbone.</li>
+              <li>Built the visual pipeline (<b>ResNet-18</b> features from raw frames); co-authored an IEEE-format report.</li>
+            </ul>
+            <div class="pc-stack">
+              <span class="mc-pill">PyTorch</span><span class="mc-pill">Transformers</span><span class="mc-pill">ResNet-18</span><span class="mc-pill">Retrieval</span><span class="mc-pill">Mixture-of-Experts</span>
             </div>
-
-            <div class="sv-state sv-state-3">
-              <span class="sv-eyebrow">Built with</span>
-              <div class="sv-stack">
-                <span class="mc-pill">React</span><span class="mc-pill">Vite</span><span class="mc-pill">Tailwind CSS</span>
-                <span class="mc-pill">FastAPI</span><span class="mc-pill">Supabase</span><span class="mc-pill">Groq API</span>
-                <span class="mc-pill">Vercel</span><span class="mc-pill">Render</span>
-              </div>
+            <div class="pc-links">
+              <a href="https://github.com/siddhisingh9/mplmm-project" target="_blank" rel="noopener">GitHub &nearr;</a>
             </div>
-
-          </div>
-          <div class="sv-dots" role="group" aria-label="Project story steps"></div>
-        </div>
-
-        <div class="story-track">
-          <div class="story-beat active" data-beat="1" data-label="Overview">
-            <span class="beat-num">01</span>
-            <h3>HostelDesk &mdash; AI Complaint Management</h3>
-            <p class="beat-teaser">A full-stack complaint system for hostel life, with an LLM doing the triage most teams do by hand.</p>
-          </div>
-          <div class="story-beat" data-beat="2" data-label="AI pipeline">
-            <span class="beat-num">02</span>
-            <p>An LLM pipeline auto-categorizes complaints, scores priority, and flags duplicates with contextual reasoning &mdash; cutting redundant tickets.</p>
-          </div>
-          <div class="story-beat" data-beat="3" data-label="Stack">
-            <span class="beat-num">03</span>
-            <p>React + Vite, FastAPI, Supabase, deployed on Vercel and Render. Real-time notifications and community upvoting surface high-priority complaints.</p>
           </div>
         </div>
-      </div>
+      </article>
+
+      <!-- HostelDesk -->
+      <article class="pc-card" data-tab="HostelDesk" id="proj-hosteldesk" aria-roledescription="slide" aria-label="3 of 3: HostelDesk">
+        <div class="pc-inner">
+          <div class="pc-vis" style="--glow:var(--gold)">
+            <span class="pc-vis-eyebrow">LLM triage pipeline</span>
+            <div class="flow" aria-hidden="true">
+              <div class="flow-ticket"><small>new complaint</small>&ldquo;No hot water on floor 2 again&rdquo;</div>
+              <div class="flow-step"><span class="flow-dot">&#10003;</span>Auto-categorized</div>
+              <div class="flow-step"><span class="flow-dot">&#10003;</span>Priority scored</div>
+              <div class="flow-step"><span class="flow-dot">&#10003;</span>Duplicates flagged</div>
+              <div class="flow-step"><span class="flow-dot">&#10003;</span>Warden notified live</div>
+            </div>
+          </div>
+          <div class="pc-body">
+            <div class="pc-meta"><span>Mar &ndash; Apr 2026</span><span class="tag">Full-stack + AI</span></div>
+            <h3 class="pc-title">HostelDesk</h3>
+            <p class="pc-sum">A full-stack complaint system for hostel life, with an LLM doing the triage most teams do by hand.</p>
+            <ul class="pc-points">
+              <li>An <b>LLM pipeline</b> categorizes complaints and assigns priority scores.</li>
+              <li><b>Semantic comparison</b> against existing complaints flags duplicates and surfaces related issues.</li>
+              <li>Real-time notifications and <b>community upvoting</b> push high-priority complaints first.</li>
+            </ul>
+            <div class="pc-stack">
+              <span class="mc-pill">React</span><span class="mc-pill">Vite</span><span class="mc-pill">FastAPI</span><span class="mc-pill">Supabase</span><span class="mc-pill">Groq API</span><span class="mc-pill">Vercel</span><span class="mc-pill">Render</span>
+            </div>
+            <div class="pc-links">
+              <a href="https://github.com/siddhisingh9/HostelDesk" target="_blank" rel="noopener">GitHub &nearr;</a>
+            </div>
+          </div>
+        </div>
+      </article>
 
     </div>
+    </div>
+    <div class="pc-dots" id="pcDots" aria-hidden="true"></div>
+  </div>
 
+  <div class="wrap">
+    <div class="more-head reveal" id="more-projects">
+      <h3>More on my <em>GitHub</em></h3>
+      <p>Side projects, course work, and things I built because I wanted them to exist. Hover or tap to pause.</p>
+    </div>
+  </div>
+  <div class="strip reveal d1" id="moreStrip" role="region" aria-label="Other projects" tabindex="0">
+    <article class="mp-card" style="--accent:var(--pink)">
+      <span class="mp-tag">PWA &middot; Side project</span>
+      <h4 class="mp-title">Rouge</h4>
+      <p class="mp-desc">A privacy-first period tracker I built for me and my friends, because Flo is annoying. Offline-first; data stays on the phone.</p>
+      <div class="mp-stat">Walk-forward backtested predictions &middot; WCAG AA</div>
+      <div class="mp-stack"><span class="mc-pill">TypeScript</span><span class="mc-pill">React 19</span><span class="mc-pill">Dexie</span><span class="mc-pill">Supabase</span></div>
+      <div class="mp-links"><a href="https://github.com/siddhisingh9/rouge" target="_blank" rel="noopener">GitHub &nearr;</a><a href="https://siddhisingh9.github.io/rouge/" target="_blank" rel="noopener">Live &nearr;</a></div>
+    </article>
+    <article class="mp-card" style="--accent:var(--gold)">
+      <span class="mp-tag">Algorithms &middot; Info theory</span>
+      <h4 class="mp-title">Wordle Solver</h4>
+      <p class="mp-desc">Solves the NYT Wordle with an entropy-scored 2-step lookahead over all 14,855 allowed guesses and word-frequency priors.</p>
+      <div class="mp-stat">3.81 avg guesses &middot; 100% win on 2,315 games</div>
+      <div class="mp-stack"><span class="mc-pill">Python</span><span class="mc-pill">NumPy</span><span class="mc-pill">FastAPI</span><span class="mc-pill">Docker</span></div>
+      <div class="mp-links"><a href="https://github.com/siddhisingh9/wordle-solver" target="_blank" rel="noopener">GitHub &nearr;</a><a href="https://wordle-solver-d663.onrender.com/" target="_blank" rel="noopener">Live &nearr;</a></div>
+    </article>
+    <article class="mp-card" style="--accent:var(--purple)">
+      <span class="mp-tag">Hardware &middot; Computer vision</span>
+      <h4 class="mp-title">Paper Tic-Tac-Toe</h4>
+      <p class="mp-desc">Play on paper against a Raspberry Pi: OpenCV reads the hand-drawn board, Minimax replies on an Arduino-driven LED grid.</p>
+      <div class="mp-stat">Unbeatable Hard mode &middot; cheat detection</div>
+      <div class="mp-stack"><span class="mc-pill">Python</span><span class="mc-pill">OpenCV</span><span class="mc-pill">Flask</span><span class="mc-pill">Arduino</span></div>
+      <div class="mp-links"><a href="https://github.com/siddhisingh9/tic-tac-toe" target="_blank" rel="noopener">GitHub &nearr;</a></div>
+    </article>
+    <article class="mp-card" style="--accent:var(--pink)">
+      <span class="mp-tag">ML system</span>
+      <h4 class="mp-title">Cloud Task Failure Predictor</h4>
+      <p class="mp-desc">Flags cluster jobs likely to fail from the resources they request, trained on the Google Borg trace, with a live monitoring dashboard.</p>
+      <div class="mp-stat">0.90 ROC-AUC on unseen profiles &middot; 97% cache hits</div>
+      <div class="mp-stack"><span class="mc-pill">scikit-learn</span><span class="mc-pill">FastAPI</span><span class="mc-pill">Redis</span><span class="mc-pill">Streamlit</span></div>
+      <div class="mp-links"><a href="https://github.com/siddhisingh9/CloudFailurePredictorProject" target="_blank" rel="noopener">GitHub &nearr;</a><a href="https://cloudfailurepredictordashboard.onrender.com" target="_blank" rel="noopener">Live &nearr;</a></div>
+    </article>
+    <article class="mp-card" style="--accent:var(--gold)">
+      <span class="mp-tag">NLP &middot; Data analysis</span>
+      <h4 class="mp-title">RedditNLP</h4>
+      <p class="mp-desc">Reddit as a linguistic ecosystem: a full-stack NLP app exploring how language and identity differ across 10 subreddits.</p>
+      <div class="mp-stat">10 subreddits &middot; full report included</div>
+      <div class="mp-stack"><span class="mc-pill">Python</span><span class="mc-pill">FastAPI</span><span class="mc-pill">React</span><span class="mc-pill">Vite</span></div>
+      <div class="mp-links"><a href="https://github.com/siddhisingh9/RedditNLP" target="_blank" rel="noopener">GitHub &nearr;</a><a href="https://reddit-nlp.vercel.app" target="_blank" rel="noopener">Live &nearr;</a></div>
+    </article>
+  </div>
+
+  <div class="wrap">
     <div class="projects-foot reveal d2">
-      <a href="https://github.com/siddhisingh9" target="_blank" rel="noopener">More on GitHub &rarr;</a>
+      <a href="https://github.com/siddhisingh9?tab=repositories" target="_blank" rel="noopener">All repositories &rarr;</a>
     </div>
   </div>
 </section>
@@ -1028,7 +1233,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
       <h2>Let's <em>talk</em></h2>
       <p>Open to mentorship conversations, collaborations on AI/ML projects, or just a chat about what I'm building. My inbox is the fastest way to reach me.</p>
       <div class="contact-methods">
-        <a class="primary" href="mailto:siddhiwrite@gmail.com">siddhiwrite@gmail.com</a>
+        <a class="primary" href="mailto:siddhis.personal@gmail.com">siddhis.personal@gmail.com</a>
       </div>
       <div class="contact-social">
         <a href="https://www.linkedin.com/in/siddhi-singh-33170323a/" target="_blank" rel="noopener">LinkedIn</a>
@@ -1149,54 +1354,215 @@ const spy = new IntersectionObserver((entries) => {
 }, { rootMargin: '-45% 0px -50% 0px' });
 sections.forEach(s => spy.observe(s));
 
-/* ---------- project story beats + progress dots ---------- */
-document.querySelectorAll('.story-project').forEach(project => {
-  const beats = [...project.querySelectorAll('.story-beat')];
-  const states = project.querySelectorAll('.sv-state');
-  const visual = project.querySelector('.story-visual');
-  const dotsWrap = project.querySelector('.sv-dots');
-  const dots = [];
+/* ---------- count-up numbers ---------- */
+function countUp(el){
+  const from = parseFloat(el.dataset.from), to = parseFloat(el.dataset.to);
+  const dec = parseInt(el.dataset.decimals || '0', 10);
+  const pre = el.dataset.prefix || '', suf = el.dataset.suffix || '';
+  const fmt = v => pre + v.toFixed(dec) + suf;
+  if(reduceMotion){ el.textContent = fmt(to); return; }
+  const dur = 1500, delay = 350, t0 = performance.now() + delay;
+  cancelAnimationFrame(el._raf);
+  el.textContent = fmt(from);
+  const step = (now) => {
+    const t = Math.min(Math.max((now - t0) / dur, 0), 1);
+    const e = 1 - Math.pow(1 - t, 3);
+    el.textContent = fmt(from + (to - from) * e);
+    if(t < 1) el._raf = requestAnimationFrame(step);
+  };
+  el._raf = requestAnimationFrame(step);
+}
 
-  function setActive(n){
-    n = String(n);
-    beats.forEach(b => b.classList.toggle('active', b.dataset.beat === n));
-    states.forEach(s => s.classList.toggle('active', s.classList.contains('sv-state-' + n)));
-    dots.forEach((d, i) => d.setAttribute('aria-current', String(String(i + 1) === n)));
+/* ---------- main projects carousel (drag / swipe / arrows / keys) ---------- */
+(function(){
+  const track = document.getElementById('pcTrack');
+  if(!track) return;
+  const cards = [...track.querySelectorAll('.pc-card')];
+  const prev = document.getElementById('pcPrev'), next = document.getElementById('pcNext');
+  const prevLabel = document.getElementById('pcPrevLabel'), nextLabel = document.getElementById('pcNextLabel');
+  const tabsWrap = document.getElementById('pcTabs'), dotsWrap = document.getElementById('pcDots');
+  const pad = n => String(n).padStart(2, '0');
+  let active = -1;
+
+  const tabs = cards.map((card, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'pc-tab'; b.setAttribute('role', 'tab');
+    b.setAttribute('aria-controls', card.id);
+    b.innerHTML = '<span class="n">' + pad(i + 1) + '</span><span></span>';
+    b.lastChild.textContent = card.dataset.tab;
+    b.addEventListener('click', () => { stopHint(); goTo(i); });
+    tabsWrap.appendChild(b);
+    return b;
+  });
+  const dots = cards.map((card, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'pc-dot'; b.tabIndex = -1;
+    b.innerHTML = '<span></span>';
+    b.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(b);
+    return b;
+  });
+  // the "next" arrow pulses until the visitor uses the carousel once
+  function stopHint(){ next.classList.remove('hint'); }
+
+  function centerOf(card){ return card.offsetLeft + card.offsetWidth / 2 - track.clientWidth / 2; }
+  function goTo(i){
+    i = Math.max(0, Math.min(cards.length - 1, i));
+    track.scrollTo({ left: centerOf(cards[i]), behavior: reduceMotion ? 'auto' : 'smooth' });
   }
 
-  if(dotsWrap){
-    beats.forEach((beat, i) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'sv-dot';
-      btn.title = beat.dataset.label || ('Part ' + (i + 1));
-      btn.setAttribute('aria-label', 'Show part ' + (i + 1) + ' of ' + beats.length + (beat.dataset.label ? ': ' + beat.dataset.label : ''));
-      btn.innerHTML = '<span></span>';
-      btn.addEventListener('click', () => {
-        setActive(beat.dataset.beat);
-        // desktop: the visual is sticky, so scroll the matching text into view.
-        // mobile: the visual sits above the text, so just switch it in place.
-        if(getComputedStyle(visual).position === 'sticky'){
-          beat.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-        }
-      });
-      dotsWrap.appendChild(btn);
-      dots.push(btn);
+  function setActive(i){
+    if(i === active) return;
+    active = i;
+    cards.forEach((c, k) => c.classList.toggle('is-active', k === i));
+    dots.forEach((d, k) => d.setAttribute('aria-current', String(k === i)));
+    tabs.forEach((t, k) => t.setAttribute('aria-selected', String(k === i)));
+    tabs[i].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    prev.disabled = i === 0;
+    next.disabled = i === cards.length - 1;
+    prevLabel.textContent = i > 0 ? 'Prev: ' + cards[i - 1].dataset.tab : '';
+    nextLabel.textContent = i < cards.length - 1 ? 'Next: ' + cards[i + 1].dataset.tab : '';
+    prev.setAttribute('aria-label', i > 0 ? 'Previous project: ' + cards[i - 1].dataset.tab : 'Previous project');
+    next.setAttribute('aria-label', i < cards.length - 1 ? 'Next project: ' + cards[i + 1].dataset.tab : 'Next project');
+    cards[i].querySelectorAll('[data-to]').forEach(countUp);
+  }
+
+  // depth effect: cards shrink, tilt and dim as they leave the centre
+  let ticking = false;
+  function update(){
+    ticking = false;
+    const mid = track.scrollLeft + track.clientWidth / 2;
+    let best = 0, bestD = Infinity;
+    cards.forEach((card, i) => {
+      const c = card.offsetLeft + card.offsetWidth / 2;
+      const d = (c - mid) / (card.offsetWidth + 26);
+      if(Math.abs(d) < bestD){ bestD = Math.abs(d); best = i; }
+      const k = Math.min(Math.abs(d), 1.2);
+      const inner = card.firstElementChild;
+      if(reduceMotion){ inner.style.opacity = k > .5 ? .55 : 1; return; }
+      inner.style.transform = `rotateY(${Math.max(-1, Math.min(1, d)) * -9}deg) scale(${1 - k * .08})`;
+      inner.style.opacity = String(1 - k * .45);
     });
+    setActive(best);
   }
+  track.addEventListener('scroll', () => { if(!ticking){ ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  window.addEventListener('resize', () => { update(); goTo(active); });
 
-  const beatSpy = new IntersectionObserver((entries) => {
-    entries.forEach(entry => { if (entry.isIntersecting) setActive(entry.target.dataset.beat); });
-  }, { rootMargin: '-40% 0px -40% 0px', threshold: 0 });
-  beats.forEach(b => beatSpy.observe(b));
-  setActive(1);
-});
+  prev.addEventListener('click', () => { stopHint(); goTo(active - 1); });
+  next.addEventListener('click', () => { stopHint(); goTo(active + 1); });
+  track.addEventListener('pointerdown', stopHint);
+  track.addEventListener('touchstart', stopHint, { passive: true });
+  track.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowRight'){ e.preventDefault(); goTo(active + 1); }
+    else if(e.key === 'ArrowLeft'){ e.preventDefault(); goTo(active - 1); }
+  });
+
+  // mouse drag (touch and trackpads already scroll natively)
+  let down = false, startX = 0, startLeft = 0, moved = 0, lastX = 0, lastT = 0, vel = 0;
+  track.addEventListener('pointerdown', (e) => {
+    if(e.pointerType !== 'mouse' || e.button !== 0) return;
+    down = true; moved = 0; startX = lastX = e.clientX; startLeft = track.scrollLeft; lastT = performance.now(); vel = 0;
+  });
+  window.addEventListener('pointermove', (e) => {
+    if(!down) return;
+    const dx = e.clientX - startX;
+    if(!track.classList.contains('dragging') && Math.abs(dx) > 4) track.classList.add('dragging');
+    moved = Math.max(moved, Math.abs(dx));
+    track.scrollLeft = startLeft - dx;
+    const now = performance.now();
+    vel = (e.clientX - lastX) / Math.max(now - lastT, 1);
+    lastX = e.clientX; lastT = now;
+  });
+  window.addEventListener('pointerup', () => {
+    if(!down) return;
+    down = false;
+    if(!track.classList.contains('dragging')) return;
+    // flick: a quick throw moves one card even if it didn't cross the halfway mark
+    let target = active;
+    if(vel < -0.35 && track.scrollLeft > centerOf(cards[active]) - 4) target = active + 1;
+    else if(vel > 0.35 && track.scrollLeft < centerOf(cards[active]) + 4) target = active - 1;
+    track.classList.remove('dragging');
+    goTo(target);
+  });
+  track.addEventListener('click', (e) => {
+    if(moved > 6){ e.preventDefault(); e.stopPropagation(); moved = 0; return; }
+    const card = e.target.closest('.pc-card');
+    const i = cards.indexOf(card);
+    if(card && i !== active){ e.preventDefault(); e.stopPropagation(); stopHint(); goTo(i); }
+  }, true);
+  track.addEventListener('dragstart', (e) => e.preventDefault());
+
+  update();
+  // start the first card's animation once the section is actually seen
+  const first = cards[0];
+  first.classList.remove('is-active');
+  new IntersectionObserver((entries, obs) => {
+    if(entries[0].isIntersecting){
+      cards[active].classList.add('is-active');
+      cards[active].querySelectorAll('[data-to]').forEach(countUp);
+      obs.disconnect();
+      if(!reduceMotion){
+        next.classList.add('hint');
+        // a small sideways nudge that shows the row moves
+        setTimeout(() => {
+          track.classList.add('nudge');
+          track.addEventListener('animationend', () => track.classList.remove('nudge'), { once: true });
+        }, 900);
+      }
+    }
+  }, { threshold: .35 }).observe(track);
+})();
+
+/* ---------- "more projects" drifting strip ---------- */
+(function(){
+  const strip = document.getElementById('moreStrip');
+  if(!strip) return;
+  const originals = [...strip.children];
+  if(reduceMotion) return; // plain swipeable row
+  // duplicate the set so the loop is seamless (clones hidden from assistive tech)
+  originals.forEach(card => {
+    const clone = card.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    clone.querySelectorAll('a').forEach(a => a.tabIndex = -1);
+    strip.appendChild(clone);
+  });
+  const SPEED = 0.035; // px per ms
+  let pos = 0, last = performance.now(), paused = false, resumeT = null, visible = false;
+  const half = () => strip.scrollWidth / 2;
+
+  function loop(now){
+    const dt = Math.min(now - last, 64); last = now;
+    if(Math.abs(strip.scrollLeft - pos) > 2) pos = strip.scrollLeft; // user scrolled it
+    if(!paused && visible){
+      pos += SPEED * dt;
+      const h = half();
+      if(pos >= h) pos -= h;
+      strip.scrollLeft = pos;
+    } else {
+      const h = half();
+      if(strip.scrollLeft >= h){ pos = strip.scrollLeft - h; strip.scrollLeft = pos; }
+      else if(strip.scrollLeft <= 0 && paused){ pos = h; strip.scrollLeft = pos; }
+    }
+    requestAnimationFrame(loop);
+  }
+  const pause = () => { paused = true; clearTimeout(resumeT); };
+  const resume = (ms = 0) => { clearTimeout(resumeT); resumeT = setTimeout(() => { paused = false; pos = strip.scrollLeft; }, ms); };
+  strip.addEventListener('pointerenter', (e) => { if(e.pointerType === 'mouse') pause(); });
+  strip.addEventListener('pointerleave', (e) => { if(e.pointerType === 'mouse') resume(); });
+  strip.addEventListener('touchstart', pause, { passive: true });
+  strip.addEventListener('touchend', () => resume(2500), { passive: true });
+  strip.addEventListener('focusin', pause);
+  strip.addEventListener('focusout', () => resume(400));
+  new IntersectionObserver((en) => { visible = en[0].isIntersecting; }).observe(strip);
+  requestAnimationFrame(loop);
+})();
 
 /* ---------- typewriter status line ---------- */
 const STATUS_LINES = [
   'Ranked Top 200 of 27,000+ at Flipkart',
   'B.Tech DSAI · 5th Sem · IIT Bhilai',
   'Mentoring AI/ML at OpenLake, IIT Bhilai',
+  'Red-teaming RAG chatbots with LangGraph agents',
   'Building with LLMs, RAG & multi-agent systems',
   '250+ problems solved on LeetCode'
 ];
@@ -1229,9 +1595,11 @@ if(reduceMotion){
 const SKILLS_DATA = [
   { name: 'Languages', color: 'purple', items: ['Python','C / C++','SQL','JavaScript','HTML / CSS'] },
   { name: 'Core CS', color: 'gold', items: ['Data Structures & Algorithms','DBMS','OS','COA'] },
-  { name: 'AI / ML', color: 'pink', items: ['LLMs','LangChain','LangGraph','Multi-Agent Systems','RAG','Prompt Engineering','NLP','Time-Series Forecasting','EDA','Transformers'] },
-  { name: 'Developer Tools', color: 'purple', items: ['Git','GitHub','Docker','Google Cloud Platform','Redis','Render','Streamlit','Supabase','Hugging Face'] },
-  { name: 'Libraries', color: 'gold', items: ['NumPy','Pandas','Matplotlib','Seaborn','Scikit-learn','FastAPI','REST APIs','BeautifulSoup','Selenium','NLTK'] }
+  { name: 'LLMs & Agents', color: 'pink', items: ['LLMs','RAG','AI Agents','LangGraph','LangChain','Multi-Agent Systems','Prompt Engineering'] },
+  { name: 'Machine Learning', color: 'purple', items: ['LLM Fine-Tuning','LLM Red-Teaming','NLP','Transformers','Multimodal Learning','Time-Series Forecasting'] },
+  { name: 'LLM Tooling', color: 'gold', items: ['Hugging Face','Ollama','ChromaDB','Vector Databases','MCP','OpenTelemetry'] },
+  { name: 'Frameworks & Libraries', color: 'pink', items: ['PyTorch','Transformers','Scikit-learn','NumPy','Pandas','FastAPI','React','Streamlit','pytest'] },
+  { name: 'Developer Tools', color: 'purple', items: ['Git','GitHub Actions','Docker','Google Cloud Platform','Redis','Supabase','Render','Vercel'] }
 ];
 
 function buildOrbitGrid(){
@@ -1421,7 +1789,7 @@ document.querySelectorAll('.fc-link').forEach(link => {
 
 /* ---------- command palette ( / or Ctrl/Cmd + K ) ---------- */
 (function(){
-  const EMAIL = 'siddhiwrite@gmail.com';
+  const EMAIL = 'siddhis.personal@gmail.com';
   const palette = document.getElementById('palette');
   const input = document.getElementById('paletteInput');
   const list = document.getElementById('paletteList');
@@ -1487,7 +1855,8 @@ document.querySelectorAll('.fc-link').forEach(link => {
   const COMMANDS = [
     { label: 'About',        kind: 'section', keys: 'bio me intro',              run: goTo('about') },
     { label: 'Education',    kind: 'section', keys: 'iit bhilai cgpa college',   run: goTo('education') },
-    { label: 'Projects',     kind: 'section', keys: 'work hosteldesk cloud',     run: goTo('projects') },
+    { label: 'Projects',     kind: 'section', keys: 'work redrag red-teaming mplmm multimodal hosteldesk',     run: goTo('projects') },
+    { label: 'More projects', kind: 'section', keys: 'github wordle rouge period tracker tic-tac-toe raspberry pi cloud reddit nlp side', run: goTo('more-projects') },
     { label: 'Skills',       kind: 'section', keys: 'stack tech languages tools',run: goTo('skills') },
     { label: 'Achievements', kind: 'section', keys: 'flipkart hsbc internship awards',           run: goTo('achievements') },
     { label: 'Activities',   kind: 'section', keys: 'openlake gdg designx sports leadership', run: goTo('activities') },
