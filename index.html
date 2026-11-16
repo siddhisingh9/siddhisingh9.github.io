@@ -376,71 +376,40 @@ section.block.alt{background:var(--bg-soft);border-top:1px solid var(--line-soft
 
 /* left: the animated visual */
 .pc-vis{
-  position:relative;padding:34px 30px;display:flex;flex-direction:column;justify-content:center;align-items:center;
-  background:var(--surface-2);border-right:1px solid var(--line-soft);overflow:hidden;min-height:400px;
+  position:relative;padding:24px 22px 22px;display:flex;flex-direction:column;gap:14px;
+  background-color:var(--surface-2);
+  background-image:radial-gradient(var(--line) 1px, transparent 1.2px);background-size:18px 18px;
+  border-right:1px solid var(--line-soft);min-height:400px;
 }
-.pc-vis::before{
-  content:'';position:absolute;width:320px;height:320px;border-radius:50%;filter:blur(70px);opacity:.22;
-  top:-110px;left:-90px;background:var(--glow,var(--purple));transition:opacity .8s ease;
-}
-.pc-card.is-active .pc-vis::before{opacity:.38;}
-.pc-vis > *{position:relative;}
-.pc-vis-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-low);margin-bottom:22px;}
+.pc-vis-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-low);}
 
-/* RedRAG: before/after bars */
-.vbar{width:100%;max-width:290px;margin-bottom:24px;}
-.vbar:last-child{margin-bottom:0;}
-.vbar-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;}
-.vbar-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--ink-mid);}
-.vbar-num{font-family:var(--serif);font-size:34px;line-height:1;color:var(--gold);}
-.vbar-track{height:8px;border-radius:100px;background:var(--line);overflow:hidden;}
-.vbar-fill{
-  height:100%;width:var(--from);border-radius:100px;background:linear-gradient(90deg,var(--purple-deep),var(--pink));
-  transition:width 1.5s cubic-bezier(.22,1,.36,1) .35s;
-}
-.pc-card.is-active .vbar-fill{width:var(--to);}
-.vbar-foot{font-family:var(--mono);font-size:10px;color:var(--ink-low);margin-top:7px;}
+/* architecture diagrams */
+.dg{width:100%;height:auto;display:block;flex:1;overflow:visible;}
+.dg-n rect{fill:var(--surface);stroke:var(--line);stroke-width:1.2;}
+.dg-n.hl-pink rect{stroke:var(--pink);}
+.dg-n.hl-gold rect{stroke:var(--gold);}
+.dg-n.hl-purple rect{stroke:var(--purple);}
+.dg-n.missing rect{fill:transparent;stroke:var(--ink-low);stroke-dasharray:4 4;}
+.dg-n.missing text{fill:var(--ink-low);}
+.dg text{font-family:var(--mono);}
+.dg .t{font-size:11.5px;fill:var(--ink-hi);}
+.dg .s{font-size:9.5px;fill:var(--ink-low);}
+.dg-e{fill:none;stroke:var(--ink-low);stroke-width:1.3;stroke-dasharray:4 4;}
+.dg-l{font-size:9px;fill:var(--ink-mid);paint-order:stroke;stroke:var(--surface-2);stroke-width:5px;stroke-linejoin:round;}
+/* build-up when the card arrives in the centre */
+.dg-n,.dg-e,.dg-l{opacity:0;transition:opacity .45s ease;}
+.pc-card.is-active .dg-n,.pc-card.is-active .dg-e,.pc-card.is-active .dg-l{opacity:1;transition-delay:calc(var(--d) * 140ms + 150ms);}
+.pc-card.is-active .dg-e{animation:dgFlow 1.1s linear infinite;}
+@keyframes dgFlow{to{stroke-dashoffset:-16;}}
+.pc-card.is-active .dg-n.missing rect{animation:dgRecover 4s ease 1.2s infinite;}
+.pc-card.is-active .dg-n.missing text{animation:dgRecoverT 4s ease 1.2s infinite;}
+@keyframes dgRecover{0%,30%{stroke:var(--ink-low);stroke-dasharray:4 4;fill:transparent;}45%,85%{stroke:var(--gold);stroke-dasharray:none;fill:rgba(218,181,107,.1);}100%{stroke:var(--ink-low);stroke-dasharray:4 4;fill:transparent;}}
+@keyframes dgRecoverT{0%,30%{fill:var(--ink-low);}45%,85%{fill:var(--gold);}100%{fill:var(--ink-low);}}
 
-/* MPLMM: modality chips + big number */
-.modal-row{display:flex;gap:10px;margin-bottom:28px;}
-.modal-chip{
-  font-family:var(--mono);font-size:11.5px;padding:7px 14px;border-radius:100px;
-  border:1px solid var(--purple-dim);color:var(--ink-hi);transition:all .5s ease;
-}
-.pc-card.is-active .modal-chip.drop{animation:modalDrop 3.6s ease .3s both;}
-@keyframes modalDrop{
-  0%{border-style:solid;color:var(--ink-hi);}
-  20%,45%{border-style:dashed;border-color:var(--ink-low);color:var(--ink-low);background:transparent;}
-  70%,100%{border-style:solid;border-color:var(--gold);color:var(--gold);background:rgba(218,181,107,.1);}
-}
-.modal-cap{font-family:var(--mono);font-size:10px;color:var(--ink-low);margin:-18px 0 22px;height:14px;}
-.big-num{font-family:var(--serif);font-size:64px;line-height:1;color:var(--gold);}
-.big-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-low);margin:8px 0 20px;text-align:center;}
-.ticks{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--ink-mid);}
-.tick{width:22px;height:22px;border-radius:6px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;color:transparent;font-size:12px;transition:all .3s ease;}
-.pc-card.is-active .tick{border-color:var(--pink);color:var(--pink);background:rgba(230,147,172,.1);}
-.pc-card.is-active .tick:nth-child(1){transition-delay:1.1s;}
-.pc-card.is-active .tick:nth-child(2){transition-delay:1.3s;}
-.pc-card.is-active .tick:nth-child(3){transition-delay:1.5s;}
-.pc-card.is-active .tick:nth-child(4){transition-delay:1.7s;}
-.ticks span:last-child{margin-left:6px;}
-
-/* HostelDesk: triage pipeline */
-.flow{position:relative;width:100%;max-width:270px;display:flex;flex-direction:column;gap:16px;}
-.flow-ticket{
-  font-family:var(--mono);font-size:11.5px;color:var(--ink-hi);background:var(--surface);border:1px solid var(--line);
-  border-radius:10px;padding:11px 14px;opacity:0;transform:translateX(-16px);transition:all .6s cubic-bezier(.22,1,.36,1) .2s;
-}
-.flow-ticket small{display:block;color:var(--ink-low);font-size:10px;margin-bottom:2px;}
-.pc-card.is-active .flow-ticket{opacity:1;transform:none;}
-.flow-step{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12.5px;color:var(--ink-low);transition:color .4s ease;}
-.flow-dot{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;font-size:12px;color:transparent;transition:all .4s ease;}
-.pc-card.is-active .flow-step{color:var(--ink-hi);}
-.pc-card.is-active .flow-step .flow-dot{border-color:var(--gold);color:var(--gold);background:rgba(218,181,107,.1);}
-.pc-card.is-active .flow-step:nth-of-type(2), .pc-card.is-active .flow-step:nth-of-type(2) .flow-dot{transition-delay:.8s;}
-.pc-card.is-active .flow-step:nth-of-type(3), .pc-card.is-active .flow-step:nth-of-type(3) .flow-dot{transition-delay:1.2s;}
-.pc-card.is-active .flow-step:nth-of-type(4), .pc-card.is-active .flow-step:nth-of-type(4) .flow-dot{transition-delay:1.6s;}
-.pc-card.is-active .flow-step:nth-of-type(5), .pc-card.is-active .flow-step:nth-of-type(5) .flow-dot{transition-delay:2s;}
+.pc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.pc-stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
+.pc-stat b{display:block;font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.1;color:var(--gold);}
+.pc-stat span{display:block;font-family:var(--mono);font-size:9.5px;line-height:1.35;color:var(--ink-low);margin-top:3px;}
 
 /* right: details */
 .pc-body{padding:34px 36px;display:flex;flex-direction:column;}
@@ -511,99 +480,94 @@ section.block.alt{background:var(--bg-soft);border-top:1px solid var(--line-soft
 @media (max-width:860px){
   .pc{--cw:min(560px, 80vw);}
   .pc-inner{grid-template-columns:1fr;}
-  .pc-vis{min-height:250px;border-right:none;border-bottom:1px solid var(--line-soft);padding:28px 22px;}
+  .pc-vis{min-height:0;border-right:none;border-bottom:1px solid var(--line-soft);padding:20px 16px 16px;}
   .pc-body{padding:26px 24px;}
   .pc-title{font-size:25px;}
-  .pc-side{width:44px;height:44px;top:150px;}
+  .pc-side{width:44px;height:44px;top:170px;}
   .pc-side svg{width:17px;height:17px;}
   .pc-side-label{display:none;}
 }
 @media (max-width:480px){
   .pc-track{gap:14px;}
-  .big-num{font-size:52px;}
+  .pc-stat b{font-size:19px;}
   .mp-card{flex-basis:262px;}
 }
 
 /* ============================================================
-   SKILLS — orbiting clusters
+   SKILLS — one orbit, category list beside it
    ============================================================ */
-.orbit-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:8px 4px;
-  justify-items:center;padding-top:4px;
+.sk-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:48px;align-items:center;}
+.sk-list{display:flex;flex-direction:column;gap:6px;}
+.sk-item{
+  position:relative;width:100%;text-align:left;display:block;
+  padding:10px 16px 12px 18px;border-radius:12px;border:1px solid transparent;
+  transition:background-color .25s ease,border-color .25s ease;
 }
-.orbit-grid .orbit-cluster:nth-child(7){grid-column:1 / -1;}
+.sk-item::before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:2px;border-radius:2px;background:var(--line);transition:background-color .25s ease;}
+.sk-item:hover{background:var(--surface);}
+.sk-item.is-active{background:var(--surface);border-color:var(--line);}
+.sk-item.is-active::before{background:var(--c);}
+.sk-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
+.sk-name{font-family:var(--serif);font-size:20px;color:var(--ink-mid);transition:color .25s ease;}
+.sk-item.is-active .sk-name,.sk-item:hover .sk-name{color:var(--ink-hi);}
+.sk-count{font-family:var(--mono);font-size:10.5px;color:var(--ink-low);}
+.sk-item.is-active .sk-count{color:var(--c);}
+.sk-items{display:block;font-family:var(--mono);font-size:11px;line-height:1.6;color:var(--ink-low);margin-top:3px;}
+.sk-bar{position:absolute;left:18px;right:16px;bottom:6px;height:1px;background:transparent;overflow:hidden;}
+.sk-bar i{display:block;height:100%;width:0;background:var(--c);opacity:.7;}
+.sk-item.is-active .sk-bar i{animation:skProg 4.8s linear forwards;}
+.sk-list.paused .sk-bar i,.sk-grid.offscreen .sk-bar i{animation-play-state:paused !important;}
+@keyframes skProg{to{width:100%;}}
 
-.orbit-cluster{
-  position:relative;width:clamp(260px,34vw,340px);height:clamp(260px,34vw,340px);
-  display:flex;align-items:center;justify-content:center;
-  transition:transform .4s cubic-bezier(.22,1,.36,1);
+.sk-stage{position:relative;width:100%;max-width:500px;aspect-ratio:1;margin:0 auto;}
+.sk-ring{position:absolute;top:50%;left:50%;border-radius:50%;border:1px dashed var(--line);transform:translate(-50%,-50%);}
+.sk-ring.r1{width:56%;height:56%;}
+.sk-ring.r2{width:88%;height:88%;}
+.sk-ring.r0{width:28%;height:28%;border-style:solid;border-color:var(--line-soft);}
+.sk-hub{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;
+  width:24%;aspect-ratio:1;border-radius:50%;
+  background:var(--surface-2);border:1px solid var(--c);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6px;
+  box-shadow:0 0 0 8px var(--bg),0 0 0 9px var(--line-soft);
+  transition:border-color .4s ease;
 }
-.orbit-grid:has(.orbit-cluster:hover) .orbit-cluster:not(:hover){
-  opacity:.38;filter:saturate(.6);
-}
-.orbit-cluster:hover{transform:scale(1.1);z-index:20;}
-
-.orbit-hub{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:108px;height:108px;border-radius:50%;
-  background:var(--surface-2);border:1px solid var(--line);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
-  z-index:2;transition:border-color .3s ease;padding:0 8px;
-}
-.orbit-hub.c-purple{border-color:var(--purple-deep);}
-.orbit-hub.c-pink{border-color:var(--pink-dim);}
-.orbit-hub.c-gold{border-color:var(--gold-dim);}
-.orbit-cluster:hover .orbit-hub.c-purple{border-color:var(--purple);}
-.orbit-cluster:hover .orbit-hub.c-pink{border-color:var(--pink);}
-.orbit-cluster:hover .orbit-hub.c-gold{border-color:var(--gold);}
-.hub-name{font-family:var(--mono);font-size:12.5px;letter-spacing:.03em;color:var(--ink-hi);line-height:1.3;}
-.hub-count{font-family:var(--mono);font-size:10.5px;color:var(--ink-low);margin-top:4px;}
-
-.orbit-ring{
-  position:absolute;inset:0;
-  animation-name:orbitSpin;animation-timing-function:linear;animation-iteration-count:infinite;
-}
-.orbit-ring.rev{animation-name:orbitSpinRev;}
+.sk-hub-name{font-family:var(--serif);font-size:clamp(14px,1.6vw,18px);line-height:1.15;color:var(--ink-hi);}
+.sk-hub-count{font-family:var(--mono);font-size:10px;color:var(--c);margin-top:4px;}
+.sk-orbit{position:absolute;inset:0;animation:orbitSpin 60s linear infinite;}
+.sk-orbit.rev{animation-name:orbitSpinRev;animation-duration:80s;}
+.sk-stage:hover .sk-orbit,.sk-stage:hover .sk-counter{animation-play-state:paused;}
 @keyframes orbitSpin{to{transform:rotate(360deg);}}
 @keyframes orbitSpinRev{to{transform:rotate(-360deg);}}
-.orbit-cluster:hover .orbit-ring,
-.orbit-cluster:hover .orbit-item-counter{animation-play-state:paused;}
-
-.orbit-item-wrap{position:absolute;top:50%;left:50%;}
-.orbit-item-counter{
-  animation-name:orbitSpinRev;animation-timing-function:linear;animation-iteration-count:infinite;
+.sk-moon{position:absolute;top:50%;left:50%;width:7px;height:7px;margin:-3.5px;border-radius:50%;background:var(--c);opacity:.55;}
+.sk-wrap{position:absolute;top:50%;left:50%;width:0;height:0;}
+.sk-counter{animation:orbitSpinRev 60s linear infinite;}
+.sk-orbit.rev .sk-counter{animation-name:orbitSpin;animation-duration:80s;}
+.sk-pill{
+  display:inline-block;transform:translate(-50%,-50%);white-space:nowrap;
+  font-family:var(--mono);font-size:12px;color:var(--ink-hi);
+  padding:7px 14px;border-radius:100px;background:var(--surface);border:1px solid var(--c);
+  animation:skIn .55s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--i) * 45ms);
+  transition:background-color .2s ease,color .2s ease;
 }
-.orbit-item-wrap.rev .orbit-item-counter{animation-name:orbitSpin;}
+.sk-pill:hover{background:var(--surface-2);color:var(--c);}
+.sk-pill.out{animation:skOut .25s ease forwards;}
+@keyframes skIn{from{opacity:0;transform:translate(-50%,-50%) scale(.4);}to{opacity:1;transform:translate(-50%,-50%) scale(1);}}
+@keyframes skOut{to{opacity:0;transform:translate(-50%,-50%) scale(.6);}}
 
-.orbit-pill{
-  display:inline-block;font-family:var(--mono);font-size:11.5px;white-space:nowrap;
-  padding:7px 14px;border-radius:100px;background:var(--surface);border:1px solid var(--line);
-  color:var(--ink-mid);transition:all .2s ease;cursor:default;
+@media (max-width:860px){
+  .sk-grid{grid-template-columns:1fr;gap:28px;}
+  .sk-stage{max-width:400px;}
+  .sk-list{order:2;}
 }
-.orbit-pill.purple{border-color:var(--purple-dim);}
-.orbit-pill.pink{border-color:var(--pink-dim);}
-.orbit-pill.gold{border-color:var(--gold-dim);}
-.orbit-pill.purple:hover{border-color:var(--purple);color:var(--purple);background:var(--surface-2);transform:scale(1.15);}
-.orbit-pill.pink:hover{border-color:var(--pink);color:var(--pink);background:var(--surface-2);transform:scale(1.15);}
-.orbit-pill.gold:hover{border-color:var(--gold);color:var(--gold);background:var(--surface-2);transform:scale(1.15);}
-
-@media (max-width:520px){
-  .orbit-grid{grid-template-columns:1fr;}
-  .orbit-grid .orbit-cluster:nth-child(7){grid-column:auto;}
+@media (max-width:480px){
+  .sk-pill{font-size:10.5px;padding:5px 10px;}
+  .sk-name{font-size:18px;}
 }
-
-/* fallback: static wrapped list on narrow screens or reduced motion */
-@media (max-width:700px), (prefers-reduced-motion: reduce){
-  .orbit-cluster{width:100%;height:auto;display:block;}
-  .orbit-hub{position:static;transform:none;width:auto;height:auto;border-radius:10px;
-    flex-direction:row;gap:8px;padding:10px 14px;margin-bottom:12px;justify-content:flex-start;}
-  .orbit-ring{position:static;animation:none !important;display:flex;flex-wrap:wrap;gap:8px;}
-  .orbit-item-wrap{position:static !important;transform:none !important;}
-  .orbit-item-counter{animation:none !important;transform:none !important;}
-  .orbit-cluster:hover{transform:none;}
-  .orbit-grid:has(.orbit-cluster:hover) .orbit-cluster:not(:hover){opacity:1;filter:none;}
+@media (prefers-reduced-motion: reduce){
+  .sk-orbit,.sk-counter{animation:none !important;}
+  .sk-bar{display:none;}
 }
-
 
 /* ============================================================
    EDUCATION
@@ -969,6 +933,9 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
     </div>
   </div>
 
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs><marker id="dgArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9 z" fill="#8B7692"/></marker></defs>
+  </svg>
   <div class="pc reveal d1">
     <div class="pc-stage">
     <button class="pc-side prev" id="pcPrev" type="button" aria-label="Previous project">
@@ -984,18 +951,10 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
       <!-- RedRAG -->
       <article class="pc-card" data-tab="RedRAG" id="proj-redrag" aria-roledescription="slide" aria-label="1 of 3: RedRAG">
         <div class="pc-inner">
-          <div class="pc-vis" style="--glow:var(--pink)">
-            <span class="pc-vis-eyebrow">Attack success rate</span>
-            <div class="vbar">
-              <div class="vbar-top"><span class="vbar-label">Agent vs. rule-based defenses</span><span class="vbar-num" data-from="20" data-to="55" data-suffix="%">55%</span></div>
-              <div class="vbar-track"><div class="vbar-fill" style="--from:20%;--to:55%"></div></div>
-              <div class="vbar-foot">20% &rarr; 55% once the LangGraph agent rewrites failed attacks</div>
-            </div>
-            <div class="vbar">
-              <div class="vbar-top"><span class="vbar-label">With the DeBERTa guard</span><span class="vbar-num" data-from="85" data-to="0" data-suffix="%">0%</span></div>
-              <div class="vbar-track"><div class="vbar-fill" style="--from:85%;--to:0%"></div></div>
-              <div class="vbar-foot">85% &rarr; 0%, with 0% false refusals</div>
-            </div>
+          <div class="pc-vis">
+            <span class="pc-vis-eyebrow">LLM security · architecture</span>
+            <svg class="dg" viewBox="0 0 400 290" role="img" aria-label="RedRAG architecture: attack library feeds a LangGraph agent that attacks a RAG chatbot; a DeBERTa judge scores replies and failed attacks are retried; results ship as CLI, Streamlit, MCP server and CI gate"><g class="dg-n " style="--d:0"><rect x="16" y="16" width="156" height="48" rx="9"/><text class="t" x="28" y="37.0">Attack library</text><text class="s" x="28" y="52.0">55 OWASP attacks</text></g><g class="dg-n hl-pink" style="--d:1"><rect x="228" y="16" width="156" height="48" rx="9"/><text class="t" x="240" y="37.0">LangGraph agent</text><text class="s" x="240" y="52.0">rewrites attacks</text></g><g class="dg-n " style="--d:2"><rect x="228" y="128" width="156" height="48" rx="9"/><text class="t" x="240" y="149.0">RAG chatbot</text><text class="s" x="240" y="164.0">FastAPI·Chroma·Ollama</text></g><g class="dg-n hl-gold" style="--d:3"><rect x="16" y="128" width="156" height="48" rx="9"/><text class="t" x="28" y="149.0">DeBERTa judge</text><text class="s" x="28" y="164.0">90% acc · κ 0.76</text></g><g class="dg-n hl-purple" style="--d:4"><rect x="16" y="228" width="368" height="44" rx="9"/><text class="t" x="200.0" y="254.0" text-anchor="middle">CLI · Streamlit · MCP server · CI gate</text></g><path class="dg-e" d="M172 40 H224" marker-end="url(#dgArrow)" style="--d:1"/><path class="dg-e" d="M306 64 V124" marker-end="url(#dgArrow)" style="--d:2"/><text class="dg-l" x="314" y="99" text-anchor="start" style="--d:2">attack</text><path class="dg-e" d="M228 152 H176" marker-end="url(#dgArrow)" style="--d:3"/><text class="dg-l" x="202" y="146" text-anchor="middle" style="--d:3">reply</text><path class="dg-e" d="M120 128 C 140 92, 200 86, 252 68" marker-end="url(#dgArrow)" style="--d:4"/><text class="dg-l" x="138" y="84" text-anchor="middle" style="--d:4">failed → retry</text><path class="dg-e" d="M94 176 V224" marker-end="url(#dgArrow)" style="--d:4"/><text class="dg-l" x="102" y="204" text-anchor="start" style="--d:4">verdicts</text></svg>
+            <div class="pc-stats"><div class="pc-stat"><b>20→55%</b><span>agent attack success</span></div><div class="pc-stat"><b>85→0%</b><span>with the guard</span></div><div class="pc-stat"><b data-from="0" data-to="407">407</b><span>tests</span></div></div>
           </div>
           <div class="pc-body">
             <div class="pc-meta"><span>Nov 2026</span><span class="tag">LLM Security</span></div>
@@ -1020,17 +979,10 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
       <!-- MPLMM -->
       <article class="pc-card" data-tab="Missing Modalities" id="proj-mplmm" aria-roledescription="slide" aria-label="2 of 3: Multimodal sentiment with missing modalities">
         <div class="pc-inner">
-          <div class="pc-vis" style="--glow:var(--purple)">
-            <span class="pc-vis-eyebrow">When a modality goes missing</span>
-            <div class="modal-row" aria-hidden="true">
-              <span class="modal-chip">Text</span>
-              <span class="modal-chip">Audio</span>
-              <span class="modal-chip drop">Video</span>
-            </div>
-            <div class="modal-cap" aria-hidden="true">missing &rarr; retrieved from similar samples</div>
-            <div class="big-num" data-from="0" data-to="7.03" data-prefix="+" data-decimals="2">+7.03</div>
-            <div class="big-label">avg weighted F1 &middot; audio/video only</div>
-            <div class="ticks"><span class="tick">&#10003;</span><span class="tick">&#10003;</span><span class="tick">&#10003;</span><span class="tick">&#10003;</span><span>4 / 4 benchmarks</span></div>
+          <div class="pc-vis">
+            <span class="pc-vis-eyebrow">Multimodal ML · architecture</span>
+            <svg class="dg" viewBox="0 0 400 290" role="img" aria-label="Missing-modality architecture: text and audio feed a frozen MPLMM backbone with mixture of experts; missing video is rebuilt by RAGPrompt from a memory bank of complete samples and enters through a gate; output is sentiment and emotion"><g class="dg-n " style="--d:0"><rect x="16" y="16" width="92" height="36" rx="9"/><text class="t" x="62.0" y="38.0" text-anchor="middle">Text</text></g><g class="dg-n " style="--d:0"><rect x="16" y="66" width="92" height="36" rx="9"/><text class="t" x="62.0" y="88.0" text-anchor="middle">Audio</text></g><g class="dg-n missing" style="--d:0"><rect x="16" y="116" width="92" height="36" rx="9"/><text class="t" x="62.0" y="138.0" text-anchor="middle">Video</text></g><g class="dg-n hl-pink" style="--d:2"><rect x="140" y="108" width="112" height="52" rx="9"/><text class="t" x="196.0" y="131.0" text-anchor="middle">RAGPrompt</text><text class="s" x="196.0" y="146.0" text-anchor="middle">cosine top-k</text></g><g class="dg-n " style="--d:1"><rect x="16" y="222" width="180" height="50" rx="9"/><text class="t" x="28" y="244.0">Memory bank</text><text class="s" x="28" y="259.0">complete samples</text></g><g class="dg-n hl-purple" style="--d:3"><rect x="284" y="16" width="100" height="144" rx="9"/><text class="t" x="334.0" y="68.0" text-anchor="middle">Frozen</text><text class="t" x="334.0" y="84.0" text-anchor="middle">MPLMM</text><text class="s" x="334.0" y="100.0" text-anchor="middle">backbone</text><text class="s" x="334.0" y="116.0" text-anchor="middle">+ MoE</text></g><g class="dg-n hl-gold" style="--d:4"><rect x="220" y="222" width="164" height="50" rx="9"/><text class="t" x="302.0" y="244.0" text-anchor="middle">Sentiment · Emotion</text><text class="s" x="302.0" y="259.0" text-anchor="middle">4 benchmarks</text></g><path class="dg-e" d="M108 34 H280" marker-end="url(#dgArrow)" style="--d:1"/><path class="dg-e" d="M108 84 H280" marker-end="url(#dgArrow)" style="--d:1"/><path class="dg-e" d="M108 134 H136" marker-end="url(#dgArrow)" style="--d:2"/><text class="dg-l" x="122" y="128" text-anchor="middle" style="--d:2">missing</text><path class="dg-e" d="M106 222 V196 H196 V164" marker-end="url(#dgArrow)" style="--d:2"/><text class="dg-l" x="112" y="206" text-anchor="start" style="--d:2">retrieve</text><path class="dg-e" d="M252 134 H280" marker-end="url(#dgArrow)" style="--d:3"/><text class="dg-l" x="266" y="128" text-anchor="middle" style="--d:3">gate</text><path class="dg-e" d="M334 160 V218" marker-end="url(#dgArrow)" style="--d:4"/></svg>
+            <div class="pc-stats"><div class="pc-stat"><b data-from="0" data-to="7.03" data-prefix="+" data-decimals="2">+7.03</b><span>avg F1, audio/video only</span></div><div class="pc-stat"><b>4 / 4</b><span>datasets improved</span></div><div class="pc-stat"><b data-from="0" data-to="4.91" data-prefix="+" data-decimals="2">+4.91</b><span>best weighted F1 gain</span></div></div>
           </div>
           <div class="pc-body">
             <div class="pc-meta"><span>Sept &ndash; Nov 2026</span><span class="tag">Multimodal ML</span></div>
@@ -1054,15 +1006,10 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
       <!-- HostelDesk -->
       <article class="pc-card" data-tab="HostelDesk" id="proj-hosteldesk" aria-roledescription="slide" aria-label="3 of 3: HostelDesk">
         <div class="pc-inner">
-          <div class="pc-vis" style="--glow:var(--gold)">
-            <span class="pc-vis-eyebrow">LLM triage pipeline</span>
-            <div class="flow" aria-hidden="true">
-              <div class="flow-ticket"><small>new complaint</small>&ldquo;No hot water on floor 2 again&rdquo;</div>
-              <div class="flow-step"><span class="flow-dot">&#10003;</span>Auto-categorized</div>
-              <div class="flow-step"><span class="flow-dot">&#10003;</span>Priority scored</div>
-              <div class="flow-step"><span class="flow-dot">&#10003;</span>Duplicates flagged</div>
-              <div class="flow-step"><span class="flow-dot">&#10003;</span>Warden notified live</div>
-            </div>
+          <div class="pc-vis">
+            <span class="pc-vis-eyebrow">Full-stack + AI · architecture</span>
+            <svg class="dg" viewBox="0 0 400 290" role="img" aria-label="HostelDesk architecture: students use a React and Vite frontend on Vercel, which calls FastAPI on Render; an LLM on Groq triages each complaint by category, priority and duplicates; results are stored in Supabase and pushed as realtime notifications"><g class="dg-n " style="--d:0"><rect x="16" y="16" width="100" height="48" rx="9"/><text class="t" x="28" y="37.0">Students</text><text class="s" x="28" y="52.0">file + upvote</text></g><g class="dg-n " style="--d:1"><rect x="146" y="16" width="112" height="48" rx="9"/><text class="t" x="158" y="37.0">React + Vite</text><text class="s" x="158" y="52.0">on Vercel</text></g><g class="dg-n hl-purple" style="--d:2"><rect x="288" y="16" width="96" height="48" rx="9"/><text class="t" x="300" y="37.0">FastAPI</text><text class="s" x="300" y="52.0">on Render</text></g><g class="dg-n hl-pink" style="--d:3"><rect x="200" y="118" width="184" height="66" rx="9"/><text class="t" x="292.0" y="139.0" text-anchor="middle">LLM triage · Groq</text><text class="s" x="292.0" y="155.0" text-anchor="middle">category · priority</text><text class="s" x="292.0" y="171.0" text-anchor="middle">duplicate check</text></g><g class="dg-n " style="--d:4"><rect x="16" y="118" width="150" height="66" rx="9"/><text class="t" x="28" y="148.0">Supabase</text><text class="s" x="28" y="163.0">complaints · votes</text></g><g class="dg-n hl-gold" style="--d:5"><rect x="16" y="228" width="368" height="44" rx="9"/><text class="t" x="200.0" y="254.0" text-anchor="middle">Realtime notifications → warden + students</text></g><path class="dg-e" d="M116 40 H142" marker-end="url(#dgArrow)" style="--d:1"/><path class="dg-e" d="M258 40 H284" marker-end="url(#dgArrow)" style="--d:2"/><path class="dg-e" d="M336 64 V114" marker-end="url(#dgArrow)" style="--d:3"/><text class="dg-l" x="344" y="94" text-anchor="start" style="--d:3">new complaint</text><path class="dg-e" d="M200 151 H170" marker-end="url(#dgArrow)" style="--d:4"/><text class="dg-l" x="185" y="145" text-anchor="middle" style="--d:4">tagged</text><path class="dg-e" d="M91 184 V224" marker-end="url(#dgArrow)" style="--d:5"/><text class="dg-l" x="99" y="208" text-anchor="start" style="--d:5">realtime</text></svg>
+            <div class="pc-stats"><div class="pc-stat"><b>LLM</b><span>triage + dedupe</span></div><div class="pc-stat"><b>Live</b><span>notifications</span></div><div class="pc-stat"><b>3</b><span>AI checks per complaint</span></div></div>
           </div>
           <div class="pc-body">
             <div class="pc-meta"><span>Mar &ndash; Apr 2026</span><span class="tag">Full-stack + AI</span></div>
@@ -1150,9 +1097,17 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
     <div class="reveal">
       <div class="eyebrow">Skills</div>
       <h2 class="sec-title">What I <em class="hl-gold">build</em> with</h2>
-      <p class="sec-intro">Grouped by domain, each cluster orbiting its own label. Hover a cluster to pause it and read closely.</p>
+      <p class="sec-intro">Pick a category to put it in orbit, or let it cycle on its own.</p>
     </div>
-    <div class="orbit-grid reveal d1" id="orbitGrid"></div>
+    <div class="sk-grid reveal d1" id="skGrid">
+      <div class="sk-list" id="skList" role="tablist" aria-label="Skill categories"></div>
+      <div class="sk-stage" id="skStage" aria-hidden="true">
+        <div class="sk-ring r2"></div><div class="sk-ring r1"></div><div class="sk-ring r0"></div>
+        <div class="sk-orbit" id="skOrbitIn"></div>
+        <div class="sk-orbit rev" id="skOrbitOut"></div>
+        <div class="sk-hub"><span class="sk-hub-name" id="skHubName"></span><span class="sk-hub-count" id="skHubCount"></span></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1602,52 +1557,107 @@ const SKILLS_DATA = [
   { name: 'Developer Tools', color: 'purple', items: ['Git','GitHub Actions','Docker','Google Cloud Platform','Redis','Supabase','Render','Vercel'] }
 ];
 
-function buildOrbitGrid(){
-  const grid = document.getElementById('orbitGrid');
-  if(!grid) return;
-  grid.innerHTML = '';
-  SKILLS_DATA.forEach((cat, ci) => {
-    const n = cat.items.length;
-    const radius = Math.min(92 + n * 4, 148);
-    const dir = ci % 2 === 0 ? '' : 'rev';
-    const duration = 34 + ci * 6;
+(function(){
+  const list = document.getElementById('skList');
+  const grid = document.getElementById('skGrid');
+  const stage = document.getElementById('skStage');
+  const orbIn = document.getElementById('skOrbitIn'), orbOut = document.getElementById('skOrbitOut');
+  const hubName = document.getElementById('skHubName'), hubCount = document.getElementById('skHubCount');
+  if(!list) return;
+  const COLOR = { purple: 'var(--purple)', pink: 'var(--pink)', gold: 'var(--gold)' };
+  let active = -1;
 
-    const cluster = document.createElement('div');
-    cluster.className = 'orbit-cluster';
-
-    const hub = document.createElement('div');
-    hub.className = `orbit-hub c-${cat.color}`;
-    hub.innerHTML = `<span class="hub-name">${cat.name}</span><span class="hub-count">${n} skills</span>`;
-    cluster.appendChild(hub);
-
-    const ring = document.createElement('div');
-    ring.className = `orbit-ring ${dir}`.trim();
-    ring.style.animationDuration = duration + 's';
-
-    cat.items.forEach((skill, i) => {
-      const angle = (360 / n) * i;
-      const wrap = document.createElement('div');
-      wrap.className = `orbit-item-wrap ${dir}`.trim();
-      wrap.style.transform = `rotate(${angle}deg) translate(${radius}px) rotate(${-angle}deg) translate(-50%,-50%)`;
-
-      const counter = document.createElement('div');
-      counter.className = 'orbit-item-counter';
-      counter.style.animationDuration = duration + 's';
-
-      const pill = document.createElement('span');
-      pill.className = `orbit-pill ${cat.color}`;
-      pill.textContent = skill;
-
-      counter.appendChild(pill);
-      wrap.appendChild(counter);
-      ring.appendChild(wrap);
-    });
-
-    cluster.appendChild(ring);
-    grid.appendChild(cluster);
+  const items = SKILLS_DATA.map((cat, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'sk-item'; b.setAttribute('role', 'tab');
+    b.style.setProperty('--c', COLOR[cat.color]);
+    b.innerHTML = '<span class="sk-row"><span class="sk-name"></span><span class="sk-count"></span></span><span class="sk-items"></span><span class="sk-bar"><i></i></span>';
+    b.querySelector('.sk-name').textContent = cat.name;
+    b.querySelector('.sk-count').textContent = String(cat.items.length).padStart(2, '0');
+    b.querySelector('.sk-items').textContent = cat.items.join(' · ');
+    b.addEventListener('mouseenter', () => select(i));
+    b.addEventListener('focus', () => select(i));
+    b.addEventListener('click', () => select(i));
+    b.querySelector('.sk-bar i').addEventListener('animationend', () => select((i + 1) % SKILLS_DATA.length));
+    list.appendChild(b);
+    return b;
   });
-}
-buildOrbitGrid();
+
+  function place(container, skills, radiusPct, offset){
+    const size = stage.clientWidth;
+    const r = size * radiusPct / 2;
+    skills.forEach((skill, k) => {
+      const angle = offset + (360 / skills.length) * k;
+      const wrap = document.createElement('div');
+      wrap.className = 'sk-wrap';
+      wrap.style.transform = `rotate(${angle}deg) translate(${r}px) rotate(${-angle}deg)`;
+      const counter = document.createElement('div');
+      counter.className = 'sk-counter';
+      const pill = document.createElement('span');
+      pill.className = 'sk-pill';
+      pill.style.setProperty('--i', String(k + (radiusPct > .7 ? 3 : 0)));
+      pill.textContent = skill;
+      counter.appendChild(pill); wrap.appendChild(counter); container.appendChild(wrap);
+    });
+    // a couple of small moons on the ring, between the pills
+    for(let m = 0; m < 2; m++){
+      const a = offset + 180 / skills.length + m * 180;
+      const moon = document.createElement('span');
+      moon.className = 'sk-moon';
+      moon.style.transform = `rotate(${a}deg) translate(${r}px)`;
+      container.prepend(moon); // behind the pills
+    }
+  }
+
+  function render(cat, animateOut){
+    const build = () => {
+      orbIn.innerHTML = ''; orbOut.innerHTML = '';
+      [orbIn, orbOut].forEach(o => { o.style.animation = 'none'; void o.offsetWidth; o.style.animation = ''; });
+      const n = cat.items.length;
+      // short lists sit on one ring; longer ones split across both
+      const inner = n <= 5 ? [] : cat.items.slice(0, Math.floor(n * 0.42));
+      const outer = cat.items.slice(inner.length);
+      if(inner.length) place(orbIn, inner, .56, -90);
+      place(orbOut, outer, .88, -90 + 180 / outer.length);
+    };
+    if(animateOut){
+      stage.querySelectorAll('.sk-pill').forEach(p => p.classList.add('out'));
+      setTimeout(build, 230);
+    } else build();
+  }
+
+  function select(i){
+    if(i === active) return;
+    const first = active === -1;
+    active = i;
+    const cat = SKILLS_DATA[i];
+    stage.style.setProperty('--c', COLOR[cat.color]);
+    hubName.textContent = cat.name;
+    hubCount.textContent = cat.items.length + ' skills';
+    items.forEach((b, k) => {
+      b.classList.toggle('is-active', k === i);
+      b.setAttribute('aria-selected', String(k === i));
+      // restart the progress bar on the newly active row
+      const bar = b.querySelector('.sk-bar i');
+      bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = '';
+    });
+    render(cat, !first);
+  }
+
+  // pause auto-cycling while someone is reading
+  [list, stage].forEach(el => {
+    el.addEventListener('mouseenter', () => list.classList.add('paused'));
+    el.addEventListener('mouseleave', () => list.classList.remove('paused'));
+  });
+  list.addEventListener('focusin', () => list.classList.add('paused'));
+  list.addEventListener('focusout', () => list.classList.remove('paused'));
+  new IntersectionObserver((en) => grid.classList.toggle('offscreen', !en[0].isIntersecting), { threshold: .2 }).observe(grid);
+  grid.classList.add('offscreen');
+
+  let rT;
+  window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => render(SKILLS_DATA[active], false), 150); });
+  select(0);
+})();
 
 /* ---------- ambient particle field (reacts to the cursor) ---------- */
 (function(){
