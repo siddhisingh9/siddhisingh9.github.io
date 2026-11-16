@@ -270,6 +270,27 @@ section.block.alt{background:var(--bg-soft);border-top:1px solid var(--line-soft
 .sec-title em.hl-pink{color:var(--pink);}
 .sec-title em.hl-gold{color:var(--gold);}
 .sec-intro{font-size:15.5px;color:var(--ink-mid);max-width:580px;margin-bottom:46px;}
+/* section title variants, so each section opens differently */
+.h-rule{display:flex;align-items:baseline;gap:18px;}
+.h-rule::after{content:'';flex:1;height:1px;background:var(--line);align-self:center;transform:translateY(4px);}
+.h-rule-note{font-style:italic;color:var(--gold);}
+.h-big{font-size:clamp(56px,9vw,112px);line-height:.95;letter-spacing:-.025em;margin-bottom:26px;}
+.h-count{font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--pink);vertical-align:top;position:relative;top:.4em;margin-left:10px;}
+.more-head .h-count{font-size:11px;top:.2em;margin-left:6px;}
+.sec-center{text-align:center;margin-bottom:44px;}
+.h-italic{font-size:clamp(46px,6.5vw,76px);line-height:1;margin-bottom:12px;}
+.h-italic em{font-style:italic;color:var(--gold);}
+.h-meta{font-family:var(--mono);font-size:12px;color:var(--ink-low);letter-spacing:.03em;}
+.h-meta span{color:var(--ink-hi);}
+.h-mid{font-size:clamp(34px,4.6vw,50px);}
+.sec-side{display:grid;grid-template-columns:240px minmax(0,1fr);gap:40px;align-items:start;}
+.sec-side-head{position:sticky;top:104px;}
+.sec-side-head .sec-title{font-size:clamp(30px,3.4vw,40px);margin-bottom:0;hyphens:manual;}
+.h-index{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+@media (max-width:860px){
+  .sec-side{grid-template-columns:1fr;gap:20px;}
+  .sec-side-head{position:static;}
+}
 .sec-split{display:grid;grid-template-columns:1fr minmax(0,380px);gap:40px;align-items:end;margin-bottom:40px;}
 .sec-split .sec-title,.sec-split .sec-intro{margin-bottom:0;}
 @media (max-width:860px){.sec-split{grid-template-columns:1fr;gap:12px;}}
@@ -899,7 +920,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 <section class="block alt" id="about">
   <div class="wrap">
     <div class="reveal">
-      <h2 class="sec-title">About &amp; <em class="hl-gold">education</em></h2>
+      <h2 class="sec-title h-rule"><span>About <span class="h-rule-note">&amp; education</span></span></h2>
     </div>
     <div class="about-grid">
       <div class="about-copy reveal d1">
@@ -941,7 +962,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 <section class="block alt" id="projects">
   <div class="wrap">
     <div class="pc-head reveal">
-      <h2 class="sec-title">Things I've <em class="hl-pink">built</em></h2>
+      <h2 class="sec-title h-big">Projects<sup class="h-count">03</sup></h2>
       <div class="pc-tabs" id="pcTabs" role="tablist" aria-label="Projects"></div>
     </div>
   </div>
@@ -1050,7 +1071,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 
   <div class="wrap">
     <div class="more-head reveal" id="more-projects">
-      <h3>More on my <em>GitHub</em></h3>
+      <h3>More projects <sup class="h-count">05</sup></h3>
       <p>Side projects, course work, and things I built because I wanted them to exist. Hover or tap to pause.</p>
     </div>
   </div>
@@ -1107,9 +1128,9 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 <!-- ============ SKILLS ============ -->
 <section class="block" id="skills">
   <div class="wrap">
-    <div class="reveal">
-      <h2 class="sec-title">What I <em class="hl-gold">build</em> with</h2>
-      <p class="sec-intro">Pick a category to put it in orbit, or let it cycle on its own.</p>
+    <div class="sec-center reveal">
+      <h2 class="sec-title h-italic"><em>Skills</em></h2>
+      <p class="h-meta"><span id="skTotal">45</span> tools across <span id="skAreas">7</span> areas &middot; pick one to put it in orbit</p>
     </div>
     <div class="sk-grid reveal d1" id="skGrid">
       <div class="sk-list" id="skList" role="tablist" aria-label="Skill categories"></div>
@@ -1126,9 +1147,10 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 <!-- ============ ACHIEVEMENTS ============ -->
 <section class="block alt" id="achievements">
   <div class="wrap">
-    <div class="reveal">
-      <div class="eyebrow">Achievements</div>
-      <h2 class="sec-title">Selected, out of <em class="hl-purple">thousands</em></h2>
+    <div class="sec-side">
+    <div class="sec-side-head reveal">
+      <span class="h-index">Highlights</span>
+      <h2 class="sec-title">Achievements</h2>
     </div>
     <div class="timeline reveal d1">
       <div class="tl-item" id="ach-hsbc">
@@ -1148,6 +1170,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
         </div>
       </div>
     </div>
+    </div>
   </div>
 </section>
 
@@ -1155,7 +1178,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 <section class="block" id="activities">
   <div class="wrap">
     <div class="sec-split reveal">
-      <h2 class="sec-title">Leadership &amp; <em class="hl-pink">involvement</em></h2>
+      <h2 class="sec-title h-mid">Activities</h2>
       <p class="sec-intro">Most of my time outside coursework and projects goes into mentoring the next batch of builders.</p>
     </div>
     <div class="act-list reveal d1">
@@ -1667,6 +1690,9 @@ const SKILLS_DATA = [
 
   let rT;
   window.addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(() => render(SKILLS_DATA[active], false), 150); });
+  const total = SKILLS_DATA.reduce((n, c) => n + c.items.length, 0);
+  document.getElementById('skTotal').textContent = total;
+  document.getElementById('skAreas').textContent = SKILLS_DATA.length;
   select(0);
 })();
 
