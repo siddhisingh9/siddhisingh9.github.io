@@ -571,18 +571,20 @@ section.block.alt{background:var(--bg-soft);border-top:1px solid var(--line-soft
 }
 
 /* ============================================================
-   EDUCATION
+   EDUCATION (card inside About)
    ============================================================ */
+.about-side{display:flex;flex-direction:column;gap:14px;}
 .edu-card{
-  background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:34px 36px;
+  background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--purple);border-radius:12px;padding:20px 22px;
 }
-.edu-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px;}
-.edu-degree{font-family:var(--serif);font-size:24px;color:var(--ink-hi);margin-bottom:6px;}
-.edu-school{font-family:var(--mono);font-size:12.5px;color:var(--pink);}
-.edu-date{font-family:var(--mono);font-size:11.5px;color:var(--ink-low);white-space:nowrap;}
+.edu-label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-low);margin-bottom:8px;}
+.edu-degree{font-family:var(--serif);font-size:21px;line-height:1.25;color:var(--ink-hi);margin-bottom:4px;}
+.edu-school{display:block;font-family:var(--mono);font-size:12px;color:var(--pink);margin-bottom:16px;}
+.edu-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.edu-date{font-family:var(--mono);font-size:11.5px;color:var(--ink-mid);white-space:nowrap;}
 .cgpa-badge{
-  display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:13px;font-weight:700;
-  color:var(--bg);background:var(--gold);padding:8px 16px;border-radius:8px;
+  display:inline-flex;align-items:center;font-family:var(--mono);font-size:12px;font-weight:700;
+  color:var(--bg);background:var(--gold);padding:6px 12px;border-radius:7px;
 }
 
 /* ============================================================
@@ -744,6 +746,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
     position:static;width:100%;margin:0;
   }
   .about-grid,.activity-grid{grid-template-columns:1fr;}
+  .about-grid{gap:30px;}
   .tl-item{grid-template-columns:1fr;gap:6px;}
   .tl-when{order:-1;}
 }
@@ -790,7 +793,6 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
     <div class="nav-right">
     <nav class="nav-links" id="navLinks">
       <a href="#about">About</a>
-      <a href="#education">Education</a>
       <a href="#projects">Projects</a>
       <a href="#skills">Skills</a>
       <a href="#achievements">Achievements</a>
@@ -876,7 +878,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
   <div class="wrap">
     <div class="reveal">
       <div class="eyebrow">About</div>
-      <h2 class="sec-title">The short <em class="hl-gold">version</em></h2>
+      <h2 class="sec-title">About &amp; <em class="hl-gold">education</em></h2>
     </div>
     <div class="about-grid">
       <div class="about-copy reveal d1">
@@ -895,31 +897,21 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
           whatever sport I can find a reason to play.
         </p>
       </div>
-      <div class="stat-strip reveal d2">
-        <div class="stat-box"><b>8.71</b><span>CGPA / 10</span></div>
-        <div class="stat-box"><b>Top 200</b><span>of 27,000+ · Flipkart</span></div>
-        <div class="stat-box"><b>250+</b><span>Problems solved on LeetCode</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ EDUCATION ============ -->
-<section class="block" id="education">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="eyebrow">Education</div>
-      <h2 class="sec-title">Where I <em class="hl-purple">study</em></h2>
-    </div>
-    <div class="edu-card reveal d1" id="edu-card">
-      <div class="edu-top">
-        <div>
+      <div class="about-side reveal d2">
+        <div class="edu-card" id="edu-card">
+          <span class="edu-label">Education</span>
           <div class="edu-degree">Indian Institute of Technology, Bhilai</div>
           <span class="edu-school">B.Tech, Data Science &amp; Artificial Intelligence</span>
+          <div class="edu-foot">
+            <span class="edu-date">2024 &ndash; 2028 (expected)</span>
+            <span class="cgpa-badge">CGPA 8.71 / 10</span>
+          </div>
         </div>
-        <span class="edu-date">July 2024 &ndash; Present</span>
+        <div class="stat-strip">
+          <div class="stat-box"><b>Top 200</b><span>of 27,000+ · Flipkart</span></div>
+          <div class="stat-box"><b>250+</b><span>Problems solved on LeetCode</span></div>
+        </div>
       </div>
-      <span class="cgpa-badge">CGPA 8.71 / 10 &middot; 5th Semester</span>
     </div>
   </div>
 </section>
@@ -1865,7 +1857,7 @@ document.querySelectorAll('.fc-link').forEach(link => {
 
   const COMMANDS = [
     { label: 'About',        kind: 'section', keys: 'bio me intro',              run: goTo('about') },
-    { label: 'Education',    kind: 'section', keys: 'iit bhilai cgpa college',   run: goTo('education') },
+    { label: 'Education',    kind: 'section', keys: 'iit bhilai cgpa college degree', run: flashTo('edu-card') },
     { label: 'Projects',     kind: 'section', keys: 'work redrag red-teaming mplmm multimodal hosteldesk',     run: goTo('projects') },
     { label: 'More projects', kind: 'section', keys: 'github wordle rouge period tracker tic-tac-toe raspberry pi cloud reddit nlp side', run: goTo('more-projects') },
     { label: 'Skills',       kind: 'section', keys: 'stack tech languages tools',run: goTo('skills') },
