@@ -200,31 +200,73 @@ header.site-nav{
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 #status-text{white-space:nowrap;overflow:hidden;}
 
-/* hero visual: a polaroid pinned in front of the card's top-right corner.
-   It only overlaps the card's header, which is empty on the right. */
+/* hero visual: the profile.json card keeps its original spot (the 150px top padding is what
+   always held it there), and an arch-framed photo stands beside its lower half, where the
+   JSON lines are short. The arch hangs a little past the card's right and bottom edges.
+   --aw  arch width (height, radii and padding all follow it)
+   --hang how far the arch sticks out past the card's right edge
+   --sink how far the arch drops below the card's bottom edge */
 .hero-visual{
+  --aw:176px;--hang:18px;--sink:48px;
   position:relative;
   padding:150px 0 0 0;
 }
-.photo-frame{
-  position:absolute;top:0;right:24px;z-index:3;
-  width:156px;margin:0;
-  background:var(--ink-hi);padding:9px 9px 30px;border-radius:3px;
-  box-shadow:0 18px 40px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.3);
-  transform:rotate(5deg);
-  transition:transform .45s cubic-bezier(.22,1,.36,1), box-shadow .45s ease;
+.photo-arch{
+  position:absolute;right:calc(var(--hang) * -1);bottom:calc(var(--sink) * -1);z-index:3;
+  width:var(--aw);margin:0;cursor:var(--cur-spark);
 }
-.photo-img{aspect-ratio:4/5;overflow:hidden;background:var(--surface-2);border-radius:1px;}
-.photo-img img{width:100%;height:100%;object-fit:cover;display:block;}
-.photo-tape{
-  position:absolute;top:-11px;left:50%;width:72px;height:22px;
-  transform:translateX(-50%) rotate(-5deg);
-  background:rgba(218,181,107,.6);box-shadow:0 1px 3px rgba(0,0,0,.25);
+/* the expanded fun_facts lines wrap before they reach the photo */
+.fc-details-body{padding-right:calc(var(--aw) - var(--hang) - 14px);}
+.fc-details-body > div{padding-left:4ch;text-indent:-4ch;}
+/* narrower laptops: the card narrows, so the arch shrinks and hangs out less */
+@media (max-width:1100px) and (min-width:861px){
+  .hero-visual{--aw:150px;--hang:6px;--sink:44px;}
+  .arch-spark{right:auto;left:62%;top:-36px;} /* no room beside it, so the sparkle sits above */
 }
-.photo-frame:hover{
-  transform:rotate(0deg) translateY(-4px) scale(1.04);
-  box-shadow:0 26px 54px rgba(0,0,0,.55), 0 2px 6px rgba(0,0,0,.3);
+@media (max-width:960px) and (min-width:861px){
+  .hero-visual{--aw:128px;--hang:4px;--sink:56px;}
 }
+/* thin gold echo of the arch, offset up-right (away from the card's text) */
+.arch-line{
+  position:absolute;inset:0;pointer-events:none;
+  border:1px solid var(--gold-dim);
+  border-radius:calc(var(--aw) / 2) calc(var(--aw) / 2) 14px 14px;
+  transform:translate(10px,-12px);
+  transition:transform .5s cubic-bezier(.22,1,.36,1), border-color .4s ease;
+}
+.arch-spark{
+  position:absolute;right:-30px;top:calc(var(--aw) * .14);width:14px;height:14px;
+  color:var(--gold);pointer-events:none;
+  animation:archTwinkle 3.2s ease-in-out infinite;
+}
+@keyframes archTwinkle{0%,100%{opacity:.45;transform:scale(.8) rotate(0deg);}50%{opacity:1;transform:scale(1) rotate(45deg);}}
+.arch-img{
+  position:relative;aspect-ratio:7/10;
+  padding:6px;background:var(--surface-2);border:1px solid var(--line);
+  border-radius:calc(var(--aw) / 2) calc(var(--aw) / 2) 14px 14px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 24px 50px rgba(0,0,0,.45), 0 0 40px rgba(181,148,227,.08);
+  transition:transform .5s cubic-bezier(.22,1,.36,1), box-shadow .5s ease, border-color .4s ease;
+}
+.arch-img img{
+  width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block;
+  border-radius:calc((var(--aw) - 14px) / 2) calc((var(--aw) - 14px) / 2) 7px 7px;
+  background:var(--surface);
+}
+.arch-cap{
+  position:absolute;left:7px;right:7px;bottom:7px;
+  padding:34px 12px 11px;border-radius:0 0 7px 7px;
+  background:linear-gradient(180deg, transparent, rgba(19,10,24,.88) 55%);
+  font-family:var(--mono);font-size:11px;line-height:1.45;color:var(--ink-hi);
+  opacity:0;transform:translateY(6px);
+  transition:opacity .35s ease, transform .35s cubic-bezier(.22,1,.36,1);
+  pointer-events:none;
+}
+.photo-arch:hover .arch-img,.photo-arch.show-cap .arch-img{
+  transform:translateY(-4px);border-color:var(--purple-dim);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 30px 60px rgba(0,0,0,.5), 0 0 50px rgba(181,148,227,.16);
+}
+.photo-arch:hover .arch-line,.photo-arch.show-cap .arch-line{transform:translate(7px,-11px);border-color:var(--gold);}
+.photo-arch:hover .arch-cap,.photo-arch.show-cap .arch-cap{opacity:1;transform:translateY(-4px);}
 
 /* JSON profile card — fixed in place, never moves */
 .fact-card{
@@ -765,16 +807,22 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 @media (max-width:860px){
   .hero-grid{grid-template-columns:1fr;}
   .hero-visual{
-    padding:12px 0 0;max-width:380px;margin:0 auto;
+    --aw:160px;
+    padding:24px 0 0;max-width:380px;margin:0 auto;
     display:flex;flex-direction:column;align-items:center;gap:0;
   }
-  .photo-frame{
-    position:relative;top:auto;right:auto;width:146px;
-    align-self:flex-end;margin:0 20px -52px 0;
+  /* phones: the card is full width, so the arch goes back above it, over the empty header corner */
+  .photo-arch{
+    position:relative;right:auto;bottom:auto;
+    align-self:flex-end;margin:0 16px -40px 0;
   }
+  .arch-spark{right:-24px;}
+  .fc-details-body{padding-right:0;}
 }
 @media (max-width:480px){
-  .photo-frame{width:124px;margin:0 6px -46px 0;}
+  .hero-visual{--aw:138px;}
+  .photo-arch{margin:0 4px -34px 0;}
+  .arch-cap{font-size:10px;padding:28px 10px 9px;}
 }
 @media (max-width:860px){
   .fact-card{
@@ -874,9 +922,11 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
     <div class="hero-visual reveal in d2">
       <!-- To use your own photo: replace the src below with your image file
            (e.g. src="siddhi.jpg", placed in the same folder as this HTML file). -->
-      <figure class="photo-frame">
-        <span class="photo-tape" aria-hidden="true"></span>
-        <div class="photo-img"><img src="siddhiimg.jpeg" alt="Siddhi Singh" id="heroPhoto"/></div>
+      <figure class="photo-arch" id="photoArch">
+        <span class="arch-line" aria-hidden="true"></span>
+        <svg class="arch-spark" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5l2.3 8.2 8.2 2.3-8.2 2.3L12 22.5l-2.3-8.2L1.5 12l8.2-2.3z" fill="currentColor"/></svg>
+        <div class="arch-img"><img src="siddhiimg.jpeg" alt="Siddhi Singh" id="heroPhoto"/></div>
+        <figcaption class="arch-cap" aria-hidden="true">// probably thinking about shawarma</figcaption>
       </figure>
 
       <div class="fact-card">
@@ -1304,6 +1354,12 @@ function spawnBurst(el){
   });
 })();
 
+/* ---------- hero photo: tap shows the caption on touch screens ---------- */
+(function(){
+  const arch = document.getElementById('photoArch');
+  if(arch) arch.addEventListener('click', () => arch.classList.toggle('show-cap'));
+})();
+
 /* ---------- mobile nav ---------- */
 const burger = document.getElementById('burger');
 const navLinks = document.getElementById('navLinks');
@@ -1399,7 +1455,11 @@ function countUp(el){
     cards.forEach((c, k) => c.classList.toggle('is-active', k === i));
     dots.forEach((d, k) => d.setAttribute('aria-current', String(k === i)));
     tabs.forEach((t, k) => t.setAttribute('aria-selected', String(k === i)));
-    tabs[i].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    // scroll only the tab strip sideways; scrollIntoView would also scroll the whole page
+    const t = tabs[i], tl = t.offsetLeft - tabsWrap.offsetLeft;
+    if(tl < tabsWrap.scrollLeft || tl + t.offsetWidth > tabsWrap.scrollLeft + tabsWrap.clientWidth){
+      tabsWrap.scrollTo({ left: tl - 12, behavior: reduceMotion ? 'auto' : 'smooth' });
+    }
     prev.disabled = i === 0;
     next.disabled = i === cards.length - 1;
     prevLabel.textContent = i > 0 ? 'Prev: ' + cards[i - 1].dataset.tab : '';
