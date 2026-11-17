@@ -275,8 +275,6 @@ section.block.alt{background:var(--bg-soft);border-top:1px solid var(--line-soft
 .h-rule::after{content:'';flex:1;height:1px;background:var(--line);align-self:center;transform:translateY(4px);}
 .h-rule-note{font-style:italic;color:var(--gold);}
 .h-big{font-size:clamp(56px,9vw,112px);line-height:.95;letter-spacing:-.025em;margin-bottom:26px;}
-.h-count{font-family:var(--mono);font-size:13px;letter-spacing:.04em;color:var(--pink);vertical-align:top;position:relative;top:.4em;margin-left:10px;}
-.more-head .h-count{font-size:11px;top:.2em;margin-left:6px;}
 .sec-center{text-align:center;margin-bottom:44px;}
 .h-italic{font-size:clamp(46px,6.5vw,76px);line-height:1;margin-bottom:12px;}
 .h-italic em{font-style:italic;color:var(--gold);}
@@ -344,11 +342,9 @@ section.block.alt{background:var(--bg-soft);border-top:1px solid var(--line-soft
   padding:12px 0 14px;transition:color .25s ease;
 }
 .pc-tab::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--pink);transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.22,1,.36,1);}
-.pc-tab .n{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--ink-low);transition:color .25s ease;}
 .pc-tab:hover{color:var(--ink-hi);}
 .pc-tab[aria-selected="true"]{color:var(--ink-hi);}
 .pc-tab[aria-selected="true"]::after{transform:scaleX(1);}
-.pc-tab[aria-selected="true"] .n{color:var(--gold);}
 
 .pc{--cw:min(880px, 86vw);position:relative;}
 .pc-stage{position:relative;}
@@ -536,8 +532,6 @@ section.block.alt{background:var(--bg-soft);border-top:1px solid var(--line-soft
 .sk-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;}
 .sk-name{font-family:var(--serif);font-size:20px;color:var(--ink-hi);opacity:.85;transition:color .25s ease;}
 .sk-item.is-active .sk-name,.sk-item:hover .sk-name{opacity:1;}
-.sk-count{font-family:var(--mono);font-size:11px;color:var(--ink-mid);}
-.sk-item.is-active .sk-count{color:var(--c);}
 .sk-items{display:block;font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--ink-mid);margin-top:3px;transition:color .25s ease;}
 .sk-item.is-active .sk-items{color:var(--ink-hi);}
 .sk-bar{position:absolute;left:18px;right:16px;bottom:6px;height:1px;background:transparent;overflow:hidden;}
@@ -962,7 +956,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 <section class="block alt" id="projects">
   <div class="wrap">
     <div class="pc-head reveal">
-      <h2 class="sec-title h-big">Projects<sup class="h-count">03</sup></h2>
+      <h2 class="sec-title h-big">Projects</h2>
       <div class="pc-tabs" id="pcTabs" role="tablist" aria-label="Projects"></div>
     </div>
   </div>
@@ -1071,7 +1065,7 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
 
   <div class="wrap">
     <div class="more-head reveal" id="more-projects">
-      <h3>More projects <sup class="h-count">05</sup></h3>
+      <h3>More projects</h3>
       <p>Side projects, course work, and things I built because I wanted them to exist. Hover or tap to pause.</p>
     </div>
   </div>
@@ -1377,8 +1371,7 @@ function countUp(el){
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'pc-tab'; b.setAttribute('role', 'tab');
     b.setAttribute('aria-controls', card.id);
-    b.innerHTML = '<span class="n">' + pad(i + 1) + '</span><span></span>';
-    b.lastChild.textContent = card.dataset.tab;
+    b.textContent = card.dataset.tab;
     b.addEventListener('click', () => { stopHint(); goTo(i); });
     tabsWrap.appendChild(b);
     return b;
@@ -1605,9 +1598,8 @@ const SKILLS_DATA = [
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'sk-item'; b.setAttribute('role', 'tab');
     b.style.setProperty('--c', COLOR[cat.color]);
-    b.innerHTML = '<span class="sk-row"><span class="sk-name"></span><span class="sk-count"></span></span><span class="sk-items"></span><span class="sk-bar"><i></i></span>';
+    b.innerHTML = '<span class="sk-row"><span class="sk-name"></span></span><span class="sk-items"></span><span class="sk-bar"><i></i></span>';
     b.querySelector('.sk-name').textContent = cat.name;
-    b.querySelector('.sk-count').textContent = String(cat.items.length).padStart(2, '0');
     b.querySelector('.sk-items').textContent = cat.items.join(' · ');
     b.addEventListener('mouseenter', () => select(i));
     b.addEventListener('focus', () => select(i));
