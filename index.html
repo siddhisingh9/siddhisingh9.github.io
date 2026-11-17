@@ -167,7 +167,7 @@ header.site-nav{
 #particle-field{position:absolute;inset:0;z-index:0;}
 .hero-grid{
   position:relative;z-index:1;
-  display:grid;grid-template-columns:1.1fr 1fr;gap:52px;align-items:center;
+  display:grid;grid-template-columns:1.1fr 1fr;gap:52px;align-items:start;
 }
 .hero-h1{
   font-size:clamp(38px,5.6vw,62px);line-height:1.08;margin-bottom:24px;letter-spacing:-.01em;
@@ -200,31 +200,28 @@ header.site-nav{
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 #status-text{white-space:nowrap;overflow:hidden;}
 
-/* hero visual: the profile.json card keeps its original spot (the 150px top padding is what
-   always held it there), and an arch-framed photo stands beside its lower half, where the
-   JSON lines are short. The arch hangs a little past the card's right and bottom edges.
-   --aw  arch width (height, radii and padding all follow it)
-   --hang how far the arch sticks out past the card's right edge
-   --sink how far the arch drops below the card's bottom edge */
+/* hero visual: the profile.json card keeps its original spot, and an arch-framed photo
+   stands on the card's top-right corner, where the header and comment line are empty.
+   The grid is top-aligned and --pad puts the card exactly where it used to sit, so the
+   arch's top lines up just under the "Open to internships" badge (the column's top edge).
+   --aw  arch width (height = aw * 10/7; radii and padding follow it)
+   --ov  how far the arch sinks into the card; it stops above the "role" line */
 .hero-visual{
-  --aw:176px;--hang:18px;--sink:48px;
+  --aw:190px;--ov:112px;--pad:171px;
   position:relative;
-  padding:150px 0 0 0;
+  padding:var(--pad) 0 0 0;
 }
 .photo-arch{
-  position:absolute;right:calc(var(--hang) * -1);bottom:calc(var(--sink) * -1);z-index:3;
+  position:absolute;right:14px;z-index:3;
+  top:calc(var(--pad) + var(--ov) - var(--aw) * 10 / 7);
   width:var(--aw);margin:0;cursor:var(--cur-spark);
 }
-/* the expanded fun_facts lines wrap before they reach the photo */
-.fc-details-body{padding-right:calc(var(--aw) - var(--hang) - 14px);}
-.fc-details-body > div{padding-left:4ch;text-indent:-4ch;}
-/* narrower laptops: the card narrows, so the arch shrinks and hangs out less */
-@media (max-width:1100px) and (min-width:861px){
-  .hero-visual{--aw:150px;--hang:6px;--sink:44px;}
-  .arch-spark{right:auto;left:62%;top:-36px;} /* no room beside it, so the sparkle sits above */
+/* narrower laptops: the card narrows, so the arch shrinks and stays above the comment line */
+@media (max-width:1040px) and (min-width:861px){
+  .hero-visual{--aw:160px;--ov:70px;}
 }
 @media (max-width:960px) and (min-width:861px){
-  .hero-visual{--aw:128px;--hang:4px;--sink:56px;}
+  .hero-visual{--aw:150px;--ov:66px;}
 }
 /* thin gold echo of the arch, offset up-right (away from the card's text) */
 .arch-line{
@@ -813,11 +810,10 @@ a.fc-link:hover,a.fc-link:focus-visible{border-bottom:1px solid var(--gold);back
   }
   /* phones: the card is full width, so the arch goes back above it, over the empty header corner */
   .photo-arch{
-    position:relative;right:auto;bottom:auto;
+    position:relative;top:auto;right:auto;
     align-self:flex-end;margin:0 16px -40px 0;
   }
   .arch-spark{right:-24px;}
-  .fc-details-body{padding-right:0;}
 }
 @media (max-width:480px){
   .hero-visual{--aw:138px;}
